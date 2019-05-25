@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import fr.dornacraft.servertools.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -18,7 +19,6 @@ import fr.voltariuss.simpledevapi.items.ItemHandling;
 public class CmdHat extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "hat";
-	private static final String DESC_ARG_REMOVE = "Retire votre chapeau.";
 
 	public CmdHat() {
 		super(CMD_LABEL);
@@ -37,17 +37,17 @@ public class CmdHat extends DornacraftCommand {
 							player.setItemOnCursor(head);
 							player.getInventory().setHelmet(hand);
 							UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-									"§eVous avez changé votre §6chapeau §e!");
+									ServerToolsConfig.getCommandMessage(CMD_LABEL, "success_message"));
 						} else {
-							UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender,
-									"Vous n'avez pas de chapeau dans la main !");
+							UtilsAPI.sendSystemMessage(MessageLevel.WARNING, sender,
+									ServerToolsConfig.getCommandMessage(CMD_LABEL, "warning_no_item_in_main_hand"));
 						}
 					} else if (args[0].equalsIgnoreCase("remove")) {
 						try {
 							ItemHandling.addItem(player, player.getInventory().getHelmet());
 							player.getInventory().setHelmet(new ItemStack(Material.AIR));
 							UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-									"§eVous avez retiré votre §6chapeau §e!");
+									ServerToolsConfig.getCommandMessage(CMD_LABEL, "info_remove_done"));
 						} catch (InventoryFullException e) {
 							UtilsAPI.sendSystemMessage(MessageLevel.ERROR, player, UtilsAPI.INVENTORY_FULL);
 						}
@@ -57,9 +57,8 @@ public class CmdHat extends DornacraftCommand {
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor()
-				.addSubCommand(new CommandNode(new CommandArgument("remove", ""), DESC_ARG_REMOVE, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument("remove", ""),
+				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_arg_remove_desc"), executor, null));
 	}
 }

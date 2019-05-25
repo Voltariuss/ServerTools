@@ -18,6 +18,8 @@ public class PlayerRespawnListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		event.setRespawnLocation(UtilsEssentials.SPAWN_LOCATION);
+		if (UtilsEssentials.SPAWN_LOCATION != null) {
+			event.setRespawnLocation(UtilsEssentials.SPAWN_LOCATION);			
+		}
 	}
 }

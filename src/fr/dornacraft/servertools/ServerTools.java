@@ -50,9 +50,19 @@ import fr.dornacraft.servertools.utils.MobSpawnerPlaceEvent;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class ServerTools extends JavaPlugin {
+	
+	private static JavaPlugin instance;
+	
+	public static JavaPlugin getInstance() {
+		return instance;
+	}
 
 	@Override
 	public void onEnable() {
+		instance = this;
+		
+		saveDefaultConfig();
+		
 		Bukkit.getPluginManager().registerEvents(new BackListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GodPlayerDamageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(), this);

@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import fr.dornacraft.servertools.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
@@ -17,7 +18,7 @@ public class CmdBroadcast implements CommandExecutor {
 		if (sender.hasPermission("dornacraft.essentials.broadcast")) {
 			if (args.length >= 1) {
 				StringBuilder bc = new StringBuilder();
-				bc.append("§7[§4§lAnnonce§7] §f");
+				bc.append(ServerToolsConfig.getCommandMessage(CMD_LABEL, "normal_prefix"));
 
 				for (String part : args) {
 					part = part.replace("&", "§").replace("§§", "&");
@@ -30,7 +31,6 @@ public class CmdBroadcast implements CommandExecutor {
 		} else {
 			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, UtilsAPI.PERMISSION_MISSING);
 		}
-
 		return false;
 	}
 }

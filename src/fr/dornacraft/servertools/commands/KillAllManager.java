@@ -1,5 +1,7 @@
 package fr.dornacraft.servertools.commands;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Ambient;
@@ -9,10 +11,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class KillAllManager {
+
+	public static final String ENTITY_OPTIONS = "[all|monsters|animals|ambient|drops|xp|arrows|mobs:[MobType]]";
+	public static final String SCOPE_OPTIONS = "[radius=100|none:world=name|current]";
+	public static final String USAGE = String.join(" ", "Usage : §6/killall", ENTITY_OPTIONS, SCOPE_OPTIONS);
 
 	public static void killEntities(Player player, String type) {
 		int nbEntities = 0;
@@ -70,12 +77,16 @@ public class KillAllManager {
 				}
 			}
 		}
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Number_Entities", Integer.toString(nbEntities));
+
 		if (type.toLowerCase().equalsIgnoreCase("all")) {
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-					"Vous avez supprimé " + nbEntities + " entitées entre tous les mondes");
+					ServerToolsConfig.getCommandMessage(CmdKillAll.CMD_LABEL, "info_kill_all_on_server", values));
 		} else {
+			values.put("Entities_Type", type);
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-					"Vous avez supprimé " + nbEntities + " " + type + " entre tous les mondes");
+					ServerToolsConfig.getCommandMessage(CmdKillAll.CMD_LABEL, "info_kill_entities_on_server", values));
 		}
 	}
 
@@ -90,8 +101,7 @@ public class KillAllManager {
 			radius = Double.parseDouble(radiusString);
 			if (radius < 0) {
 				paramsCorrect = false;
-				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-						"Usage : §6/killall [all|monsters|animals|ambient|drops|xp|arrows|mobs:[MobType]] [radius=100|none:world=name|current]");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, USAGE);
 			} else {
 				paramsCorrect = true;
 			}
@@ -101,8 +111,7 @@ public class KillAllManager {
 				paramsCorrect = true;
 			} else {
 				paramsCorrect = false;
-				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-						"Usage : §6/killall [all|monsters|animals|ambient|drops|xp|arrows|mobs:[MobType]] [radius=100|none:world=name|current]");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, USAGE);
 			}
 		}
 
@@ -117,16 +126,14 @@ public class KillAllManager {
 				}
 			} catch (Exception e) {
 				paramsCorrect = false;
-				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-						"Usage : §6/killall [all|monsters|animals|ambient|drops|xp|arrows|mobs:[MobType]] [radius=100|none:world=name|current]");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, USAGE);
 			}
 		}
 
 		if (paramsCorrect) {
 			if (radius != -999 && (player.getWorld() != world)) {
 				paramsCorrect = false;
-				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-						"Usage : §6/killall [all|monsters|animals|ambient|drops|xp|arrows|mobs:[MobType]] [radius=100|none:world=name|current]");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, USAGE);
 			}
 		}
 
@@ -185,12 +192,17 @@ public class KillAllManager {
 						}
 					}
 				}
+				HashMap<String, String> values = new HashMap<>();
+				values.put("Number_Entities", Integer.toString(nbEntities));
+				values.put("World", world.getName());
+
 				if (type.toLowerCase().equalsIgnoreCase("all")) {
-					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-							"Vous avez supprimé " + nbEntities + " entitées dans le monde " + world.getName());
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, ServerToolsConfig
+							.getCommandMessage(CmdKillAll.CMD_LABEL, "info_kill_all_in_world", values));
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-							"Vous avez supprimé " + nbEntities + " " + type + " dans le monde " + world.getName());
+					values.put("Entities_Type", type);
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, ServerToolsConfig
+							.getCommandMessage(CmdKillAll.CMD_LABEL, "info_kill_entities_in_world", values));
 				}
 			} else {
 				for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
@@ -245,12 +257,18 @@ public class KillAllManager {
 						}
 					}
 				}
+				HashMap<String, String> values = new HashMap<>();
+				values.put("Number_Entities", Integer.toString(nbEntities));
+				values.put("World", world.getName());
+				values.put("Radius", Double.toString(radius));
+
 				if (type.toLowerCase().equalsIgnoreCase("all")) {
-					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, "Vous avez supprimé " + nbEntities
-							+ " entitées dans le monde " + world.getName() + " dans un rayon de " + radius);
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, ServerToolsConfig
+							.getCommandMessage(CmdKillAll.CMD_LABEL, "info_kill_all_in_world_with_radius", values));
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, "Vous avez supprimé " + nbEntities + " "
-							+ type + " dans le monde " + world.getName() + " dans un rayon de " + radius);
+					values.put("Entities_Type", type);
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, ServerToolsConfig.getCommandMessage(
+							CmdKillAll.CMD_LABEL, "info_kill_entities_in_world_with_radius", values));
 				}
 			}
 		}

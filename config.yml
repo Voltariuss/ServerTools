@@ -1,0 +1,35 @@
+## File configuration for the plugin ServerTools ##
+
+# Informations about color management :
+#
+# Each message prefix has a specific prefix that indicate the default color and prefix of the message :
+# - "normal": default color (white: §f) - No prefix
+# - "info_": yellow color (§e) - Info prefix of SimpleDevAPI
+# - "cmd_": yellow color (§e) - No prefix (use in help page of commands)
+# - "success_": green color (§a) - Success prefix of SimpleDevAPI
+# - "failure_": red color (§c) - Failure prefix of SimpleDevAPI
+# - "warning_": red color (§c) - Warning prefix of SimpleDevAPI
+# - "error_": red color (§c) - Error prefix of SimpleDevAPI
+#
+# Note: §r (reset formatter) will reset the message color to the default color specific to each type of message
+# Example: Info message => "This message is yellow, §cRed now, §rYellow again"
+messages:
+  commands:
+    broadcast:
+      normal_prefix: '§7[§4§lAnnonce§7] §f'
+    hat:
+      cmd_arg_remove_desc: 'Retire votre chapeau'
+      info_remove_done: 'Vous avez retiré votre chapeau !'
+      success_message: 'L''item dans votre main est désormais sur votre tête !'
+      warning_no_item_in_main_hand: 'Vous n''avez aucun item dans votre main principale !'
+    killall:
+      cmd_arg_entities_desc: 'Spécifie le type d''entités à supprimer'
+      cmd_arg_entities_location_desc: 'Spécifie la portée de suppression des entités'
+      info_kill_all_on_server: 'Vous avez supprimé {Number_Entities} entités sur le serveur.'
+      info_kill_entities_on_server: 'Vous avez supprimé {Number_Entities} {Entities_Type} sur le serveur.'
+      info_kill_all_in_world: 'Vous avez supprimé {Number_Entities} entités dans le monde {World}.'
+      info_kill_entities_in_world: 'Vous avez supprimé {Number_Entities} {Entities_Type} dans le monde {World}.'
+      info_kill_all_in_world_with_radius: 'Vous avez supprimé {Number_Entities} entités dans le monde {World} dans un rayon de {Radius} blocs.'
+      info_kill_entities_in_world_with_radius: 'Vous avez supprimé {Number_Entities} {Entities_Type} dans le monde {World} dans un rayon de {Radius} blocs.'
+    suicide:
+      failure_message: 'Vous vous êtes suicidé...'

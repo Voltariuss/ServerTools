@@ -1,0 +1,167 @@
+name: ServerTools
+version: 1.0.0
+description: Server tools for basics and administration usage 
+author: Voltariuss
+authors: [Serafa43, bletrazerIV, SkilzBeater]
+
+main: fr.dornacraft.servertools.ServerTools
+
+commands:
+  spawn:
+    description: Téléportation au spawn du serveur.
+    permission: dornacraft.essentials.spawn
+  craft:
+    description: Ouverture d'une table de craft.
+    permission: dornacraft.essentials.craft
+    aliases: [workbench]
+  feed:
+    description: Régénération de la barre de nourriture.
+    permission: dornacraft.essentials.feed
+    aliases: [eat]
+  heal:
+    description: Soigne le joueur.
+    permission: dornacraft.essentials.heal
+  fly:
+    description: Active/désactive le fly mode.
+    permission: dornacraft.essentials.fly
+  gamemode:
+    description: Modifie le mode de jeu du joueur.
+    permission: dornacraft.essentials.gamemode
+    aliases: [gm]
+  god:
+    description: Active/désactive le mode invuln�rable.
+    permission: dornacraft.essentials.god
+  hat:
+    description: Place l'item dans la main du joueur sur sa t�te.
+    permission: dornacraft.essentials.hat
+  more:
+    description: Met le stock du matériel qui est dans la main du joueur au maximum.
+    permission: dornacraft.essentials.more
+  suicide:
+    description: Se suicide.
+    permission: dornacraft.essentials.suicide
+  broadcast:
+    description: Envoie une annonce sur le serveur.
+    permission: dornacraft.essentials.broadcast
+    aliases: [bc]
+  enderchest:
+    description: Ouverture de son Enderchest.
+    permission: dornacraft.essentials.enderchest
+    aliases: [ec]
+  gc:
+    description: Affiche les informations sur les chunks, la memoire et le monde.
+    permission: dornacraft.essentials.gc
+    aliases: [lag, mem, memory, tps]
+  adminexp:
+    description: Modifier l'expérience ou le niveau d'expérience d'un joueur.
+    permission: dornacraft.essentials.adminexp
+    aliases: [aexp, adminxp, axp]
+  exp:
+    description: Consulte ou modifie son propre niveau d'exp ou celui des autres.
+    permission: dornacraft.essentials.exp
+    aliases: [xp]
+  repair:
+    description: R�pare l'item dans la main ou tous les items de l'inventaire.
+    permission: dornacraft.essentials.repair
+    aliases: [fix]
+  msg:
+    description: Envoie un message au joueur designé.
+    permission: dornacraft.essentials.msg
+    aliases: [tell, m, t, whisper, w]
+  reply:
+    description: Répond au dernier joueur à avoir envoyé un message.
+    permission: dornacraft.essentials.reply
+    aliases: [r]
+  seen:
+    description: Affiche les informations de dernière connexion du joueur ou de l'ip.
+    permission: dornacraft.essentials.seen
+  spawner:
+    description: Change le type de mobs que fait apparaître le spawner dans la main.
+    permission: dornacraft.essentials.spawner
+  whois:
+    description: Donne les informations du joueur passées en paramètre.
+    permission: dornacraft.essentials.whois
+  clear:
+    description: Nettoie l'inventaire du joueur (ou son enderchest).
+    permission: dornacraft.essentials.clear
+    aliases: [ci]
+  ping:
+    description: Renvoie le ping d'un joueur (en ms).
+    permission: dornacraft.essentials.ping
+    aliases: [ms]
+  invsee:
+    description: Affiche l'inventaire complet du joueur cible.
+    permission: dornacraft.essentials.invsee
+  tpa:
+    description: Envoie une requête de téléportation vers le joueur ciblé à ce dernier.
+    permission: dornacraft.essentials.tpa
+    aliases: [tpask]
+  tpahere:
+    description: Envoie une requête de téléportation vers soit au joueur ciblé.
+    permission: dornacraft.essentials.tpahere
+  tpaall:
+    description: Envoie une requête de téléportation vers soit à tous les joueurs connectés sur le serveur.
+    permission: dornacraft.essentials.tpaall
+  tpaccept:
+    description: Accepte la requête de téléportation.
+    permission: dornacraft.essentials.tpaccept
+    aliases: [tpyes]
+  tpdeny:
+    description: Rejette la requête de téléportation.
+    permission: dornacraft.essentials.tpdeny
+    aliases: [tpno]
+  back:
+    description: Téléportation au dernier point sauvegardé.
+    permission: dornacraft.essentials.back
+  delhome:
+    description: Supprime une résidence.
+    permission: dornacraft.essentials.delhome
+  home:
+    description: Se téléporte vers une résidence.
+    permission: dornacraft.essentials.home
+  killall:
+    description: Tue les entités proches du joueur.
+    permission: dornacraft.essentials.killall
+  sethome:
+    description: Définit une résidence.
+    permission: dornacraft.essentials.sethome
+  list:
+    description: Affiche la liste des joueurs connectés.
+    permission: dornacraft.essentials.list
+  slime:
+    description: Affiche les chunks à slime aux alentours.
+    permission: dornacraft.essentials.slime
+    
+permissions:
+  dornacraft.essentials.player:
+    description: Donne l'accès à toutes les commandes du joueur
+    default: true
+    children:
+      dornacraft.essentials.msg: true
+      dornacraft.essentials.reply: true
+      dornacraft.essentials.ping: true
+      dornacraft.essentials.spawn: true
+      dornacraft.essentials.suicide: true
+      dornacraft.essentials.tpa: true
+      dornacraft.essentials.tpaccept: true
+      dornacraft.essentials.tpahere: true
+      dornacraft.essentials.tpdeny: true
+      dornacraft.essentials.home: true
+      dornacraft.essentials.delhome: true
+      dornacraft.essentials.sethome: true
+      dornacraft.essentials.back: true
+  dornacraft.essentials.moderator:
+    description: Donne l'accès à toutes les commandes du modérateur
+    default: false
+    children:
+      dornacraft.essentials.feed: true
+      dornacraft.essentials.fly: true
+      dornacraft.essentials.gamemode: true
+      dornacraft.essentials.god: true
+      dornacraft.essentials.heal: true
+  dornacraft.essentials.*:
+    description: Donne l'accès à toutes les commandes du plugin
+    default: false
+    children:
+      dornacraft.essentials.player: true
+      dornacraft.essentials.moderator: true

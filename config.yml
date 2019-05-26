@@ -53,7 +53,7 @@ messages:
       info_kill_entities_in_world_with_radius: 'Vous avez supprimé {Number_Entities} {Entities_Type} dans le monde {World} dans un rayon de {Radius} blocs.'
     ping:
       cmd_desc: 'Vous indique la latence du joueur ciblé'
-      info_ping_himself: '§6Pong ! §8» §c{Ping} ms'
+      info_ping_himself: '§6Pong ! §8» {Ping} §ems'
       info_ping_target: 'Temps de réponse du joueur §b{Player} §e: §c{Ping} ms'
     seen:
     suicide:

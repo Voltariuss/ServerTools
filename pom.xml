@@ -10,8 +10,8 @@
 	<name>ServerTools</name>
 	<description>Plugin that allow access to useful tools</description>
 
+	<!-- Dependencies -->
 	<dependencies>
-		<!-- Spigot -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
@@ -25,6 +25,7 @@
 		</dependency>
 	</dependencies>
 
+	<!-- Build -->
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>

@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
-public class UtilsEssentials {
+public class Utils {
 
 	public static Location SPAWN_LOCATION;
 

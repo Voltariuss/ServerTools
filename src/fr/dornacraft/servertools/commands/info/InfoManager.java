@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import fr.dornacraft.servertools.utils.UtilsEssentials;
+import fr.dornacraft.servertools.utils.Utils;
 
 public class InfoManager {
 
@@ -21,8 +21,8 @@ public class InfoManager {
 			SQLInfo.updateIp(player);
 		} else {
 			SQLInfo.insertTuplet(player);
-			player.teleport(UtilsEssentials.SPAWN_LOCATION);
-			player.setBedSpawnLocation(UtilsEssentials.SPAWN_LOCATION);
+			player.teleport(Utils.SPAWN_LOCATION);
+			player.setBedSpawnLocation(Utils.SPAWN_LOCATION);
 		}
 	}
 

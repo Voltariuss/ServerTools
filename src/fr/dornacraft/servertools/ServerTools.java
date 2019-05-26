@@ -1,6 +1,8 @@
 package fr.dornacraft.servertools;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.commands.CmdBroadcast;
@@ -47,12 +49,13 @@ import fr.dornacraft.servertools.listeners.PlayerMoveListener;
 import fr.dornacraft.servertools.listeners.PlayerRespawnListener;
 import fr.dornacraft.servertools.utils.Lag;
 import fr.dornacraft.servertools.utils.MobSpawnerPlaceEvent;
+import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class ServerTools extends JavaPlugin {
-	
+
 	private static JavaPlugin instance;
-	
+
 	public static JavaPlugin getInstance() {
 		return instance;
 	}
@@ -60,9 +63,17 @@ public class ServerTools extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		
+
 		saveDefaultConfig();
-		
+
+		World world = Bukkit.getWorld(getConfig().getString("spawn_location.world"));
+		double x = getConfig().getDouble("spawn_location.x");
+		double y = getConfig().getDouble("spawn_location.y");
+		double z = getConfig().getDouble("spawn_location.z");
+		float pitch = (float) getConfig().getDouble("spawn_location.pitch");
+		float yaw = (float) getConfig().getDouble("spawn_location.yaw");
+		Utils.SPAWN_LOCATION = new Location(world, x, y, z, pitch, yaw);
+
 		Bukkit.getPluginManager().registerEvents(new BackListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GodPlayerDamageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(), this);

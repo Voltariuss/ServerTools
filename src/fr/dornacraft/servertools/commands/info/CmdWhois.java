@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.dornacraft.servertools.listeners.GodPlayerDamageListener;
-import fr.dornacraft.servertools.utils.UtilsEssentials;
+import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -53,21 +53,21 @@ public class CmdWhois extends DornacraftCommand {
 	}
 
 	public static void displayWhoisPlayer(CommandSender sender, Player target) {
-		sender.sendMessage(UtilsEssentials.getHeader("Informations du joueur"));
-		sender.sendMessage(UtilsEssentials.getNewLine("Pseudo", target.getDisplayName()));
+		sender.sendMessage(Utils.getHeader("Informations du joueur"));
+		sender.sendMessage(Utils.getNewLine("Pseudo", target.getDisplayName()));
 		sender.sendMessage(
-				UtilsEssentials.getNewLine("Vie", (int) target.getHealth() + "§7/§e" + (int) target.getHealthScale()));
-		sender.sendMessage(UtilsEssentials.getNewLine("Faim", target.getFoodLevel() + "§7/§e20"));
-		sender.sendMessage(UtilsEssentials.getNewLine("Niveau", Integer.toString(target.getLevel())));
-		sender.sendMessage(UtilsEssentials.getNewLine("Monde", target.getWorld().getName()));
+				Utils.getNewLine("Vie", (int) target.getHealth() + "§7/§e" + (int) target.getHealthScale()));
+		sender.sendMessage(Utils.getNewLine("Faim", target.getFoodLevel() + "§7/§e20"));
+		sender.sendMessage(Utils.getNewLine("Niveau", Integer.toString(target.getLevel())));
+		sender.sendMessage(Utils.getNewLine("Monde", target.getWorld().getName()));
 		sender.sendMessage(
-				UtilsEssentials.getNewLine("Position", UtilsEssentials.getStrPosition(target.getLocation())));
-		sender.sendMessage(UtilsEssentials.getNewLine("Adresse IP", target.getAddress().getAddress().getHostAddress()));
-		sender.sendMessage(UtilsEssentials.getNewLine("Gamemode", target.getGameMode().name()));
-		sender.sendMessage(UtilsEssentials.getNewLine("Godmode",
-				UtilsEssentials.displayState(GodPlayerDamageListener.isGod(target))));
+				Utils.getNewLine("Position", Utils.getStrPosition(target.getLocation())));
+		sender.sendMessage(Utils.getNewLine("Adresse IP", target.getAddress().getAddress().getHostAddress()));
+		sender.sendMessage(Utils.getNewLine("Gamemode", target.getGameMode().name()));
+		sender.sendMessage(Utils.getNewLine("Godmode",
+				Utils.displayState(GodPlayerDamageListener.isGod(target))));
 		sender.sendMessage(
-				UtilsEssentials.getNewLine("Flymode", UtilsEssentials.displayState(target.getAllowFlight())));
-		sender.sendMessage(UtilsEssentials.getNewLine("Op", UtilsEssentials.displayState(target.isOp())));
+				Utils.getNewLine("Flymode", Utils.displayState(target.getAllowFlight())));
+		sender.sendMessage(Utils.getNewLine("Op", Utils.displayState(target.isOp())));
 	}
 }

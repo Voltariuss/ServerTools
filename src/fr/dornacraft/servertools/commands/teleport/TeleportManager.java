@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.listeners.PlayerMoveListener;
-import fr.dornacraft.servertools.utils.UtilsEssentials;
+import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
@@ -161,15 +161,15 @@ public class TeleportManager {
 		} else {
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, "Requête de téléportation générale envoyée.");
 		}
-		receiver.sendMessage(UtilsEssentials.getHeader("Requête de téléportation"));
-		receiver.sendMessage(UtilsEssentials.getNewLine("Émetteur", transmitter.getName()));
+		receiver.sendMessage(Utils.getHeader("Requête de téléportation"));
+		receiver.sendMessage(Utils.getNewLine("Émetteur", transmitter.getName()));
 
 		if (typeRequest == TypeRequest.TRANSMITTER_TELEPORT_TO_RECEIVER) {
 			receiver.sendMessage(
-					UtilsEssentials.getNewLine("Description", "Le joueur souhaite §c§ose téléporter vers vous"));
+					Utils.getNewLine("Description", "Le joueur souhaite §c§ose téléporter vers vous"));
 		} else {
 			receiver.sendMessage(
-					UtilsEssentials.getNewLine("Description", "Le joueur demande §c§oà vous téléporter vers lui"));
+					Utils.getNewLine("Description", "Le joueur demande §c§oà vous téléporter vers lui"));
 		}
 		receiver.sendMessage("§7Pour accepter la demande, §a/tpaccept§7, sinon §c/tpdeny§7.");
 		receiver.sendMessage("§7Cette demande de téléportation expirera dans 60 secondes.");

@@ -5,7 +5,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import fr.dornacraft.servertools.utils.UtilsEssentials;
+import fr.dornacraft.servertools.ServerTools;
+import fr.dornacraft.servertools.utils.Utils;
 
 /**
  * Classe d'écoute des événements de respawn d'un joueur
@@ -18,8 +19,8 @@ public class PlayerRespawnListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (UtilsEssentials.SPAWN_LOCATION != null) {
-			event.setRespawnLocation(UtilsEssentials.SPAWN_LOCATION);			
+		if (ServerTools.getInstance().getConfig().getBoolean("respawn_to_spawn_location")) {
+			event.setRespawnLocation(Utils.SPAWN_LOCATION);			
 		}
 	}
 }

@@ -7,7 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import fr.dornacraft.servertools.utils.UtilsEssentials;
+import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -44,13 +44,13 @@ public class CmdSeen extends DornacraftCommand {
 
 	private void getInfoPlayer(CommandSender sender, OfflinePlayer target) throws Exception {
 		String ip = InfoManager.getIp(target);
-		sender.sendMessage(UtilsEssentials.getHeader("Informations sur l'IP"));
-		sender.sendMessage(UtilsEssentials.getNewLine("Pseudo", target.getName()));
-		sender.sendMessage(UtilsEssentials.getNewLine("Dernière IP connue", ip));
-		sender.sendMessage(UtilsEssentials.getNewLine("Localisation",
+		sender.sendMessage(Utils.getHeader("Informations sur l'IP"));
+		sender.sendMessage(Utils.getNewLine("Pseudo", target.getName()));
+		sender.sendMessage(Utils.getNewLine("Dernière IP connue", ip));
+		sender.sendMessage(Utils.getNewLine("Localisation",
 				InfoManager.getCountry(target.isOnline() ? target.getPlayer().getAddress() : null)));
-		sender.sendMessage(UtilsEssentials.getNewLine("Dernière connexion", target.isOnline() ? "§aConnecté"
-				: "Il y a " + UtilsEssentials.convertTime(System.currentTimeMillis() - target.getLastPlayed())));
+		sender.sendMessage(Utils.getNewLine("Dernière connexion", target.isOnline() ? "§aConnecté"
+				: "Il y a " + Utils.convertTime(System.currentTimeMillis() - target.getLastPlayed())));
 		sender.sendMessage("§6Liste des joueurs utilisant la même adresse IP :");
 
 		for (String player : InfoManager.getPlayers(ip)) {
@@ -62,8 +62,8 @@ public class CmdSeen extends DornacraftCommand {
 		ArrayList<String> players = InfoManager.getPlayers(ip);
 
 		if (!players.isEmpty()) {
-			sender.sendMessage(UtilsEssentials.getHeader("Informations sur l'IP"));
-			sender.sendMessage(UtilsEssentials.getNewLine("IP", ip));
+			sender.sendMessage(Utils.getHeader("Informations sur l'IP"));
+			sender.sendMessage(Utils.getNewLine("IP", ip));
 			sender.sendMessage("§6Liste des joueurs utilisant la même adresse IP :");
 
 			for (String player : players) {

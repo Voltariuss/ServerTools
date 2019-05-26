@@ -29,11 +29,11 @@ messages:
       normal_prefix: '§7[§4§lAnnonce§7] §f'
     gc:
       info_header: '§6+§r------------- §aETAT SERVEUR §r-------------§6+'
-      info_time_server_running: '§6Durée de fonctionnement : §c'
-      info_current_tps: '§6TPS actuels : §c'
-      info_max_memory: '§6Mémoire maximale : §c%d§6 Mo'
-      info_used_memory: '§6Mémoire utilisée : §c%d§6 Mo'
-      info_free_memory: '§6Mémoire libre : §c%d§6 Mo'
+      info_time_server_running: '§6Durée de fonctionnement : §c{Time_Running}'
+      info_current_tps: '§6TPS actuels : §c{Tps_Value} {Tps_Indicator}'
+      info_max_memory: '§6Mémoire maximale : §c{Max_Memory}§6 Mo'
+      info_used_memory: '§6Mémoire utilisée : §c{Used_Memory}§6 Mo'
+      info_free_memory: '§6Mémoire libre : §c{Max_Memory}§6 Mo'
       info_world_template: '§bMonde §6{Name} "§c{Type}§6" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles'
       info_footer: '§6+§r--------------------------------------§6+'
     hat:

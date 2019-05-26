@@ -32,9 +32,9 @@ public class CmdHat extends DornacraftCommand {
 
 					if (args.length == 0) {
 						if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-							ItemStack hand = player.getItemOnCursor();
+							ItemStack hand = player.getInventory().getItemInMainHand();
 							ItemStack head = player.getInventory().getHelmet();
-							player.setItemOnCursor(head);
+							player.getInventory().setItemInMainHand(head);
 							player.getInventory().setHelmet(hand);
 							UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
 									ServerToolsConfig.getCommandMessage(CMD_LABEL, "success_message"));
@@ -44,10 +44,17 @@ public class CmdHat extends DornacraftCommand {
 						}
 					} else if (args[0].equalsIgnoreCase("remove")) {
 						try {
-							ItemHandling.addItem(player, player.getInventory().getHelmet());
-							player.getInventory().setHelmet(new ItemStack(Material.AIR));
-							UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-									ServerToolsConfig.getCommandMessage(CMD_LABEL, "info_remove_done"));
+							ItemStack helmet = player.getInventory().getHelmet();
+							
+							if (helmet != null) {
+								ItemHandling.addItem(player, player.getInventory().getHelmet());
+								player.getInventory().setHelmet(new ItemStack(Material.AIR));
+								UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
+										ServerToolsConfig.getCommandMessage(CMD_LABEL, "info_remove_done"));								
+							} else {
+								UtilsAPI.sendSystemMessage(MessageLevel.WARNING, player,
+										ServerToolsConfig.getCommandMessage(CMD_LABEL, "warning_remove_no_helmet"));
+							}
 						} catch (InventoryFullException e) {
 							UtilsAPI.sendSystemMessage(MessageLevel.ERROR, player, UtilsAPI.INVENTORY_FULL);
 						}

@@ -20,11 +20,13 @@ public class CmdSuicide extends DornacraftCommand {
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
-			public void execute(CommandSender sender, Command arg1, String arg2, String[] args) throws Exception {
+			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
 				if (sender instanceof Player) {
 					((Player) sender).setHealth(0);
 					UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender,
 							ServerToolsConfig.getCommandMessage(CMD_LABEL, "failure_message"));
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};

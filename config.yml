@@ -35,13 +35,14 @@ messages:
       info_max_memory: '§6Mémoire maximale : §c{Max_Memory}§6 Mo'
       info_used_memory: '§6Mémoire utilisée : §c{Used_Memory}§6 Mo'
       info_free_memory: '§6Mémoire libre : §c{Max_Memory}§6 Mo'
-      info_world_template: '§bMonde §6{Name} "§c{Type}§6" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles'
+      info_world_template: '§6Monde §a{Name} §6"§c{Type}§6" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles'
       info_footer: '§6+§r--------------------------------------§6+'
     hat:
       cmd_arg_remove_desc: 'Retire votre chapeau'
-      info_remove_done: 'Vous avez retiré votre chapeau !'
-      success_message: 'L''item dans votre main est désormais sur votre tête !'
-      warning_no_item_in_main_hand: 'Vous n''avez aucun item dans votre main principale !'
+      info_remove_done: 'Vous avez retiré votre chapeau.'
+      success_message: 'L''item dans votre main est désormais sur votre tête.'
+      warning_remove_no_helmet: 'Vous n''êtes pas équipé de chapeau.'
+      warning_no_item_in_main_hand: 'Vous n''avez aucun item dans votre main principale.'
     killall:
       cmd_arg_entities_desc: 'Spécifie le type d''entités à supprimer'
       cmd_arg_entities_location_desc: 'Spécifie la portée de suppression des entités'
@@ -53,7 +54,7 @@ messages:
       info_kill_entities_in_world_with_radius: 'Vous avez supprimé {Number_Entities} {Entities_Type} dans le monde {World} dans un rayon de {Radius} blocs.'
     ping:
       cmd_desc: 'Vous indique la latence du joueur ciblé'
-      info_ping_himself: '§6Pong ! §8» §c{Ping} ms'
+      info_ping_himself: '§6Pong ! §8» {Ping} §ems'
       info_ping_target: 'Temps de réponse du joueur §b{Player} §e: §c{Ping} ms'
     seen:
       cmd_desc: 'Affiche les informations sur l''ip du joueur ciblé'

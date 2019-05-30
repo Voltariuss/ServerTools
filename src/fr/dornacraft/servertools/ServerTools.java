@@ -7,12 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.commands.CmdBroadcast;
 import fr.dornacraft.servertools.commands.CmdHat;
-import fr.dornacraft.servertools.commands.CmdKillAll;
 import fr.dornacraft.servertools.commands.CmdSuicide;
 import fr.dornacraft.servertools.commands.info.CmdGc;
 import fr.dornacraft.servertools.commands.info.CmdPing;
 import fr.dornacraft.servertools.commands.info.CmdSeen;
 import fr.dornacraft.servertools.commands.info.CmdWhois;
+import fr.dornacraft.servertools.commands.killall.CmdKillAll;
 import fr.dornacraft.servertools.commands.player.CmdDelhome;
 import fr.dornacraft.servertools.commands.player.CmdFeed;
 import fr.dornacraft.servertools.commands.player.CmdFly;

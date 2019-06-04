@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 
 public class InfoManager {
@@ -52,8 +53,10 @@ public class InfoManager {
 	}
 
 	public static String getCountry(InetSocketAddress ip) throws Exception {
+		String unknowTag = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "normal_unknow_tag");
+		
 		if (ip == null) {
-			return "Inconnue";
+			return unknowTag;
 		}
 		URL url = new URL("http://ip-api.com/json/" + ip.getHostName());
 		BufferedReader stream = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -66,7 +69,7 @@ public class InfoManager {
 		stream.close();
 
 		if (!(entirePage.toString().contains("\"country\":\""))) {
-			return "Inconnue";
+			return unknowTag;
 		} else {
 			return entirePage.toString().split("\"country\":\"")[1].split("\",")[0];
 		}

@@ -20,6 +20,7 @@ respawn_to_spawn_location: true
 # - "failure_": red color (§c) - Failure prefix of SimpleDevAPI
 # - "warning_": red color (§c) - Warning prefix of SimpleDevAPI
 # - "error_": red color (§c) - Error prefix of SimpleDevAPI
+# - "other_": couleur et préfixe indéterminé initiaux indéterminés
 #
 # Note: §r (reset formatter) will reset the message color to the default color specific to each type of message
 # Example: Info message => "This message is yellow, §cRed now, §rYellow again"
@@ -64,6 +65,17 @@ messages:
       info_ping_himself: '§6Pong ! §8» {Ping} §ems'
       info_ping_target: 'Temps de réponse du joueur §b{Player} §e: §c{Ping} ms'
     seen:
+      cmd_desc: 'Affiche les informations sur l''ip du joueur ciblé'
+      normal_unknow_tag: 'Inconnue'
+      other_header_info_ip: 'Informations sur l''IP'
+      other_pseudo: 'Pseudo'
+      other_last_ip_know: 'Dernière IP connue'
+      other_location: 'Localisation'
+      other_last_connection: 'Dernière connexion'
+      other_connected: '§aConnecté'
+      other_last_connection_time: 'Il y a {Last_Connection_Time}'
+      other_list_players_with_same_ip: '§6Liste des joueurs utilisant la même adresse IP :'
+      error_invalid_input_or_unkown_target: 'Saisie incorrecte ou joueur/ip inconnu(e).'
     suicide:
       failure_message: 'Vous vous êtes suicidé...'
     whois: 

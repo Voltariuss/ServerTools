@@ -2,11 +2,13 @@ package fr.dornacraft.servertools.commands.info;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import fr.dornacraft.servertools.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -19,7 +21,6 @@ import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 public class CmdSeen extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "seen";
-	private static final String CMD_DESC = "Affiche des information sur l'ip du joueur cible";
 
 	public CmdSeen() {
 		super(CMD_LABEL);
@@ -38,20 +39,26 @@ public class CmdSeen extends DornacraftCommand {
 			}
 		};
 
-		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true), CMD_DESC, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true),
+				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc"), executor, null));
 	}
 
 	private void getInfoPlayer(CommandSender sender, OfflinePlayer target) throws Exception {
 		String ip = InfoManager.getIp(target);
-		sender.sendMessage(Utils.getHeader("Informations sur l'IP"));
-		sender.sendMessage(Utils.getNewLine("Pseudo", target.getName()));
-		sender.sendMessage(Utils.getNewLine("Dernière IP connue", ip));
-		sender.sendMessage(Utils.getNewLine("Localisation",
+		sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
+		sender.sendMessage(
+				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_pseudo"), target.getName()));
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_ip_know"), ip));
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_location"),
 				InfoManager.getCountry(target.isOnline() ? target.getPlayer().getAddress() : null)));
-		sender.sendMessage(Utils.getNewLine("Dernière connexion", target.isOnline() ? "§aConnecté"
-				: "Il y a " + Utils.convertTime(System.currentTimeMillis() - target.getLastPlayed())));
-		sender.sendMessage("§6Liste des joueurs utilisant la même adresse IP :");
+
+		String lastConnectionTime = Utils.convertTime(System.currentTimeMillis() - target.getLastPlayed());
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Last_Connection_Time", lastConnectionTime);
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_connection"),
+				target.isOnline() ? ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_connected")
+						: ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_connection_time", values)));
+		sender.sendMessage(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_list_players_with_same_ip"));
 
 		for (String player : InfoManager.getPlayers(ip)) {
 			sender.sendMessage(" §e- §b" + player);
@@ -62,15 +69,16 @@ public class CmdSeen extends DornacraftCommand {
 		ArrayList<String> players = InfoManager.getPlayers(ip);
 
 		if (!players.isEmpty()) {
-			sender.sendMessage(Utils.getHeader("Informations sur l'IP"));
+			sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
 			sender.sendMessage(Utils.getNewLine("IP", ip));
-			sender.sendMessage("§6Liste des joueurs utilisant la même adresse IP :");
+			sender.sendMessage(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_list_players_with_same_ip"));
 
 			for (String player : players) {
 				sender.sendMessage(" §e- §b" + player);
 			}
 		} else {
-			UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, "Saisie incorrecte ou joueur/ip inconnu(e).");
+			UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender,
+					ServerToolsConfig.getCommandMessage(CMD_LABEL, "error_invalid_input_or_unkown_target"));
 		}
 	}
 }

@@ -1,10 +1,9 @@
-name: ServerTools
-version: 1.0.0
-description: Server tools for basics and administration usage 
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
 author: Voltariuss
 authors: [Serafa43, bletrazerIV, SkilzBeater]
-
-main: fr.dornacraft.servertools.ServerTools
+main: ${project.groupeId}.${project.name}
 
 commands:
   spawn:

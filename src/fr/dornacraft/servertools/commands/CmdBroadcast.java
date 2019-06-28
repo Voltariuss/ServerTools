@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import fr.dornacraft.servertools.ServerToolsConfig;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 

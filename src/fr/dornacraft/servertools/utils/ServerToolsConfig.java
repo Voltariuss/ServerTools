@@ -1,8 +1,10 @@
-package fr.dornacraft.servertools;
+package fr.dornacraft.servertools.utils;
 
 import java.util.HashMap;
 
 import org.apache.commons.lang.text.StrSubstitutor;
+
+import fr.dornacraft.servertools.ServerTools;
 
 public class ServerToolsConfig {
 

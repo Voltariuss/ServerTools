@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import fr.dornacraft.servertools.ServerToolsConfig;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;

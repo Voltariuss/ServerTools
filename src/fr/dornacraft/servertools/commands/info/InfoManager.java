@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import fr.dornacraft.servertools.ServerToolsConfig;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 
 public class InfoManager {

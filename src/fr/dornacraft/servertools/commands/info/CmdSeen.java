@@ -8,7 +8,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import fr.dornacraft.servertools.ServerToolsConfig;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;

@@ -13,13 +13,13 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 
-import fr.dornacraft.servertools.ServerToolsConfig;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class KillAllManager {
 
-	public static final String ENTITY_OPTIONS = "all|monsters|animals|ambient|villager|drops|xp|arrows|mobs:<MobType>";
+	public static final String ENTITY_OPTIONS = "all|monsters|animals|ambient|villagers|drops|xp|arrows|mobs:<MobType>";
 	public static final String WORLD_NAME_OPTIONS = "world=current";
 	public static final String RADIUS_OPTIONS = "radius=-1";
 	public static final String USAGE = String.format("Usage : §6/killall <%s> [%s] [%s]", ENTITY_OPTIONS,
@@ -57,7 +57,8 @@ public class KillAllManager {
 	}
 
 	public static void checkWorldArgValidity(String worldArg) throws KillAllException {
-		if (!worldArg.isEmpty() && !worldArg.equalsIgnoreCase("current") && Bukkit.getWorld(worldArg) == null) {
+		if (!worldArg.isEmpty() && !worldArg.equalsIgnoreCase("current") && !worldArg.equalsIgnoreCase("all")
+				&& Bukkit.getWorld(worldArg) == null) {
 			throw new KillAllException(
 					ServerToolsConfig.getCommandMessage(CmdKillAll.CMD_LABEL, "error_invalid_world"));
 		}
@@ -66,7 +67,7 @@ public class KillAllManager {
 	public static String getWorldName(Player player, String worldArg) {
 		String worldName = worldArg;
 
-		if (worldName.equalsIgnoreCase("current")) {
+		if (worldName.isEmpty() || worldName.equalsIgnoreCase("current")) {
 			worldName = player.getWorld().getName();
 		}
 		return worldName;
@@ -96,8 +97,14 @@ public class KillAllManager {
 		}
 	}
 
-	public static boolean isTargetedWorld(World world, String worldName) {
-		return worldName.isEmpty() || worldName.equalsIgnoreCase(world.getName());
+	public static boolean isCurrentPlayerWorld(Player player, World world) {
+		return world.getName().equalsIgnoreCase(player.getWorld().getName());
+	}
+
+	public static boolean isTargetedWorld(Player player, World world, String worldName) {
+		return worldName.equalsIgnoreCase("all")
+				|| worldName.isEmpty() && isCurrentPlayerWorld(player, world)
+				|| worldName.equalsIgnoreCase(world.getName());
 	}
 
 	public static boolean isTargetedEntity(Entity selectedEntity, String entityTypeTargeted, int radius) {
@@ -155,7 +162,7 @@ public class KillAllManager {
 		String entityTypeName = getEntityTypeName(entityType);
 
 		for (World world : Bukkit.getWorlds()) {
-			if (isTargetedWorld(world, worldName)) {
+			if (isTargetedWorld(player, world, worldName)) {
 				List<Entity> entities = world.getEntities();
 
 				if (radius >= 0) {
@@ -175,15 +182,18 @@ public class KillAllManager {
 		values.put("Number_Entities", Integer.toString(nbEntities));
 		values.put("Entity_Type_Name", entityTypeName);
 
+		boolean isAllWorldTargeted = worldName.equalsIgnoreCase("all");
 		String configKey = "info_killall_on_server";
 
-		if (radius >= 0 && !worldName.isEmpty()) {
-			values.put("Radius", Integer.toString(radius));
+		if (!isAllWorldTargeted) {
 			values.put("World", worldName);
-			configKey = "info_kill_all_in_world_with_radius";
-		} else if (!worldName.isEmpty()) {
-			values.put("World", worldName);
-			configKey = "info_kill_all_in_world";
+
+			if (radius >= 0) {
+				values.put("Radius", Integer.toString(radius));
+				configKey = "info_kill_all_in_world_with_radius";
+			} else {
+				configKey = "info_kill_all_in_world";
+			}
 		}
 		UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
 				ServerToolsConfig.getCommandMessage(CmdKillAll.CMD_LABEL, configKey, values));

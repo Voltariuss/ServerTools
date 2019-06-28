@@ -3,7 +3,7 @@ version: ${project.version}
 description: ${project.description}
 author: Voltariuss
 authors: [Serafa43, bletrazerIV, SkilzBeater]
-main: ${project.groupeId}.${project.name}
+main: ${project.groupId}.${project.name}
 
 commands:
   spawn:

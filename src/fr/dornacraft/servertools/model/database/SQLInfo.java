@@ -15,6 +15,27 @@ public class SQLInfo {
 
 	public static final String TABLE_NAME = "G_Players";
 
+	public static void checkTable() throws SQLException {
+		if (!isTableCreated()) {
+			
+		}
+	}
+
+	public static boolean isTableCreated() throws SQLException {
+		PreparedStatement query = null;
+
+		try {
+			query = SQLConnection.getInstance().getConnection()
+					.prepareStatement("SELECT * FROM " + TABLE_NAME + "LIMIT 1");
+			query.executeQuery();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			query.close();
+		}
+	}
+
 	public static boolean isCreated(Player player) throws SQLException {
 		PreparedStatement query = SQLConnection.getInstance().getConnection()
 				.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?");

@@ -45,6 +45,7 @@ import fr.dornacraft.servertools.controller.listeners.BackListener;
 import fr.dornacraft.servertools.controller.listeners.FlyingPlayerJoinListener;
 import fr.dornacraft.servertools.controller.listeners.GodPlayerDamageListener;
 import fr.dornacraft.servertools.controller.listeners.MobSpawnerPlaceListener;
+import fr.dornacraft.servertools.controller.listeners.PlayerJoinListener;
 import fr.dornacraft.servertools.controller.listeners.PlayerMoveListener;
 import fr.dornacraft.servertools.controller.listeners.PlayerRespawnListener;
 import fr.dornacraft.servertools.model.utils.SpawnerCmdTabCompleter;
@@ -74,6 +75,7 @@ public class ServerTools extends JavaPlugin {
 		float yaw = (float) getConfig().getDouble("spawn_location.yaw");
 		Utils.SPAWN_LOCATION = new Location(world, x, y, z, pitch, yaw);
 
+		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BackListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GodPlayerDamageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(), this);

@@ -1,14 +1,14 @@
 package fr.dornacraft.servertools.controller.commands.info;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import fr.dornacraft.servertools.model.managers.InfoManager;
+import fr.dornacraft.servertools.model.database.managers.PlayerManager;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
@@ -30,7 +30,7 @@ public class CmdSeen extends DornacraftCommand {
 
 			@Override
 			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
-				OfflinePlayer target = InfoManager.getOfflinePlayerFromPseudo(args[0]);
+				OfflinePlayer target = PlayerManager.getOfflinePlayerFromName(args[0]);
 
 				if (target != null) {
 					getInfoPlayer(sender, target);
@@ -45,13 +45,13 @@ public class CmdSeen extends DornacraftCommand {
 	}
 
 	private void getInfoPlayer(CommandSender sender, OfflinePlayer target) throws Exception {
-		String ip = InfoManager.getIp(target);
+		String hostAdress = PlayerManager.getHostAdress(target);
 		sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
 		sender.sendMessage(
 				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_pseudo"), target.getName()));
-		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_ip_know"), ip));
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_ip_know"), hostAdress));
 		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_location"),
-				InfoManager.getCountry(target.isOnline() ? target.getPlayer().getAddress() : null)));
+				PlayerManager.getCountry(target.isOnline() ? target.getPlayer().getAddress() : null)));
 
 		String lastConnectionTime = Utils.convertTime(System.currentTimeMillis() - target.getLastPlayed());
 		HashMap<String, String> values = new HashMap<>();
@@ -61,17 +61,17 @@ public class CmdSeen extends DornacraftCommand {
 						: ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_connection_time", values)));
 		sender.sendMessage(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_list_players_with_same_ip"));
 
-		for (String player : InfoManager.getPlayers(ip)) {
-			sender.sendMessage(" §e- §b" + player);
+		for (String playerName : PlayerManager.getPlayersName(hostAdress)) {
+			sender.sendMessage(" §e- §b" + playerName);
 		}
 	}
 
-	private void getInfoIp(CommandSender sender, String ip) throws SQLException {
-		ArrayList<String> players = InfoManager.getPlayers(ip);
+	private void getInfoIp(CommandSender sender, String hostAdress) throws SQLException {
+		List<String> players = PlayerManager.getPlayersName(hostAdress);
 
 		if (!players.isEmpty()) {
 			sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
-			sender.sendMessage(Utils.getNewLine("IP", ip));
+			sender.sendMessage(Utils.getNewLine("IP", hostAdress));
 			sender.sendMessage(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_list_players_with_same_ip"));
 
 			for (String player : players) {

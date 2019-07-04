@@ -47,6 +47,6 @@ public class CmdWhois extends DornacraftCommand {
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), CMD_DESC, executor, null));
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING.getCustomArgType("player"), false), CMD_DESC, executor, null));
 	}
 }

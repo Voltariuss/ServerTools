@@ -6,8 +6,6 @@ import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class Utils {
 
-	public static Location SPAWN_LOCATION;
-
 	public static String getHeader(String title) {
 		return "§6+§e------------ §a" + title + " §e------------§6+";
 	}

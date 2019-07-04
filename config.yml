@@ -25,6 +25,7 @@ respawn_to_spawn_location: true
 # Note: §r (reset formatter) will reset the message color to the default color specific to each type of message
 # Example: Info message => "This message is yellow, §cRed now, §rYellow again"
 messages:
+  database_no_connection: 'Le plugin n''est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées.'
   commands:
     broadcast:
       normal_prefix: '§7[§4§lAnnonce§7] §f'

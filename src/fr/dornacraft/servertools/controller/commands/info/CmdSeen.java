@@ -1,5 +1,6 @@
 package fr.dornacraft.servertools.controller.commands.info;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import fr.dornacraft.servertools.model.database.managers.PlayerManager;
+import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
@@ -44,24 +45,30 @@ public class CmdSeen extends DornacraftCommand {
 				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc"), executor, null));
 	}
 
-	private void getInfoPlayer(CommandSender sender, OfflinePlayer target) throws Exception {
-		String hostAdress = PlayerManager.getHostAdress(target);
-		sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
-		sender.sendMessage(
-				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_pseudo"), target.getName()));
-		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_ip_know"), hostAdress));
-		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_location"),
-				PlayerManager.getCountry(target.isOnline() ? target.getPlayer().getAddress() : null)));
+	private void getInfoPlayer(CommandSender sender, OfflinePlayer player) throws SQLException, IOException {
+		String hostAdress = PlayerManager.getHostAddress(player);
+		String name = player.getName();
+		String country = null;
+		String lastConnectionTime = Utils.convertTime(System.currentTimeMillis() - player.getLastPlayed());
+		List<String> playersName = PlayerManager.getPlayersName(hostAdress);
 
-		String lastConnectionTime = Utils.convertTime(System.currentTimeMillis() - target.getLastPlayed());
+		if (player.isOnline()) {
+			country = PlayerManager.getCountry(player.getPlayer().getAddress());
+		}
+		sender.sendMessage(Utils.getHeader(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_header_info_ip")));
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_pseudo"), name));
+		sender.sendMessage(
+				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_ip_know"), hostAdress));
+		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_location"), country));
+
 		HashMap<String, String> values = new HashMap<>();
 		values.put("Last_Connection_Time", lastConnectionTime);
 		sender.sendMessage(Utils.getNewLine(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_connection"),
-				target.isOnline() ? ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_connected")
+				player.isOnline() ? ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_connected")
 						: ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_last_connection_time", values)));
 		sender.sendMessage(ServerToolsConfig.getCommandMessage(CMD_LABEL, "other_list_players_with_same_ip"));
 
-		for (String playerName : PlayerManager.getPlayersName(hostAdress)) {
+		for (String playerName : playersName) {
 			sender.sendMessage(" §e- §b" + playerName);
 		}
 	}

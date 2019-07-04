@@ -3,12 +3,11 @@ package fr.dornacraft.servertools.controller.commands.info;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -33,7 +32,7 @@ public class CmdPing extends DornacraftCommand {
 				if (args.length == 0
 						|| sender instanceof Player && args[0].equalsIgnoreCase(((Player) sender).getName())) {
 					if (sender instanceof Player) {
-						String ping = getPing((Player) sender);
+						String ping = PlayerManager.getPing((Player) sender);
 
 						HashMap<String, String> values = new HashMap<>();
 						values.put("Ping", ping);
@@ -47,7 +46,7 @@ public class CmdPing extends DornacraftCommand {
 					Player target = Bukkit.getPlayer(args[0]);
 
 					if (target != null) {
-						String ping = getPing(target);
+						String ping = PlayerManager.getPing(target);
 
 						HashMap<String, String> values = new HashMap<>();
 						values.put("Ping", ping);
@@ -61,27 +60,8 @@ public class CmdPing extends DornacraftCommand {
 				}
 			}
 		});
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
 				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), CMD_DESC, executor, null));
-	}
-
-	private String getPing(Player player) {
-		int ping = ((CraftPlayer) player).getHandle().ping;
-		ChatColor pingColor;
-		
-		if (ping < 40) {
-			pingColor = ChatColor.DARK_GREEN;
-		} else if (ping < 60) {
-			pingColor = ChatColor.GREEN;
-		} else if (ping < 100) {
-			pingColor = ChatColor.YELLOW;
-		} else if (ping < 200) {
-			pingColor = ChatColor.RED;
-		} else {
-			pingColor = ChatColor.DARK_RED;
-		}
-		return pingColor.toString() + ping;
 	}
 }

@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.model.managers.GlobalManager;
 import fr.dornacraft.servertools.model.managers.TeleportManager;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
@@ -30,7 +31,7 @@ public final class CmdSpawn extends DornacraftCommand {
 			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
 				if (args.length == 0 || sender instanceof Player && args[0].equalsIgnoreCase(sender.getName())) {
 					if (sender instanceof Player) {
-						TeleportManager.teleportPlayerTo(null, (Player) sender, Utils.SPAWN_LOCATION,
+						TeleportManager.teleportPlayerTo(null, (Player) sender, GlobalManager.getSpawnLocation(),
 								Utils.TELEPORT_SPAWN);
 					} else {
 						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
@@ -39,7 +40,7 @@ public final class CmdSpawn extends DornacraftCommand {
 					Player player = Bukkit.getPlayer(args[0]);
 
 					if (player != null) {
-						TeleportManager.teleportPlayerTo(sender, player, Utils.SPAWN_LOCATION,
+						TeleportManager.teleportPlayerTo(sender, player, GlobalManager.getSpawnLocation(),
 								Utils.TELEPORT_SPAWN);
 					} else {
 						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PLAYER_UNKNOW);

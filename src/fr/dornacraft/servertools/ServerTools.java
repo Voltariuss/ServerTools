@@ -1,8 +1,6 @@
 package fr.dornacraft.servertools;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.controller.commands.CmdBroadcast;
@@ -48,33 +46,36 @@ import fr.dornacraft.servertools.controller.listeners.MobSpawnerPlaceListener;
 import fr.dornacraft.servertools.controller.listeners.PlayerJoinListener;
 import fr.dornacraft.servertools.controller.listeners.PlayerMoveListener;
 import fr.dornacraft.servertools.controller.listeners.PlayerRespawnListener;
+import fr.dornacraft.servertools.model.managers.GlobalManager;
+import fr.dornacraft.servertools.model.managers.SQLManager;
 import fr.dornacraft.servertools.model.utils.SpawnerCmdTabCompleter;
 import fr.dornacraft.servertools.utils.Lag;
-import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class ServerTools extends JavaPlugin {
 
-	private static JavaPlugin instance;
+	@Override
+	public void onEnable() {
+		saveDefaultConfig();
+		SQLManager.checkDatabase();
+		GlobalManager.setSpawnLocation(this);
+		startSchedulers();
+		activateListeners();
+		activateCommands();
+		UtilsAPI.sendActivationMessage(this.getClass(), true);
 
-	public static JavaPlugin getInstance() {
-		return instance;
 	}
 
 	@Override
-	public void onEnable() {
-		instance = this;
+	public void onDisable() {
+		UtilsAPI.sendActivationMessage(this.getClass(), false);
+	}
 
-		saveDefaultConfig();
+	public void startSchedulers() {
+		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Lag(), 100L, 1L);
+	}
 
-		World world = Bukkit.getWorld(getConfig().getString("spawn_location.world"));
-		double x = getConfig().getDouble("spawn_location.x");
-		double y = getConfig().getDouble("spawn_location.y");
-		double z = getConfig().getDouble("spawn_location.z");
-		float pitch = (float) getConfig().getDouble("spawn_location.pitch");
-		float yaw = (float) getConfig().getDouble("spawn_location.yaw");
-		Utils.SPAWN_LOCATION = new Location(world, x, y, z, pitch, yaw);
-
+	public void activateListeners() {
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BackListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GodPlayerDamageListener(), this);
@@ -82,20 +83,18 @@ public class ServerTools extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new FlyingPlayerJoinListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MobSpawnerPlaceListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(), this);
+	}
 
-		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Lag(), 100L, 1L);
-
+	public void activateCommands() {
 		getCommand(CmdBroadcast.CMD_LABEL).setExecutor(new CmdBroadcast());
 		getCommand(CmdHat.CMD_LABEL).setExecutor(new CmdHat());
 		getCommand(CmdKillAll.CMD_LABEL).setExecutor(new CmdKillAll());
 		// TODO commande fonctionnelle mais non stable
 		getCommand(CmdSuicide.CMD_LABEL).setExecutor(new CmdSuicide());
-
 		getCommand(CmdGc.CMD_LABEL).setExecutor(new CmdGc());
 		getCommand(CmdPing.CMD_LABEL).setExecutor(new CmdPing());
 		getCommand(CmdSeen.CMD_LABEL).setExecutor(new CmdSeen());
 		getCommand(CmdWhois.CMD_LABEL).setExecutor(new CmdWhois());
-
 		getCommand(CmdDelhome.CMD_LABEL).setExecutor(new CmdDelhome());
 		getCommand(CmdFeed.CMD_LABEL).setExecutor(new CmdFeed());
 		getCommand(CmdFly.CMD_LABEL).setExecutor(new CmdFly());
@@ -103,7 +102,6 @@ public class ServerTools extends JavaPlugin {
 		getCommand(CmdGod.CMD_LABEL).setExecutor(new CmdGod());
 		getCommand(CmdHeal.CMD_LABEL).setExecutor(new CmdHeal());
 		getCommand(CmdSethome.CMD_LABEL).setExecutor(new CmdSethome());
-
 		getCommand(CmdClear.CMD_LABEL).setExecutor(new CmdClear());
 		getCommand(CmdAdminExp.CMD_LABEL).setExecutor(new CmdAdminExp());
 		// TODO commande NE fonctionne PAS
@@ -116,12 +114,10 @@ public class ServerTools extends JavaPlugin {
 		getCommand(CmdMsg.CMD_LABEL).setExecutor(new CmdMsg());
 		getCommand(CmdRepair.CMD_LABEL).setExecutor(new CmdRepair());
 		getCommand(CmdReply.CMD_LABEL).setExecutor(new CmdReply());
-
 		getCommand(CmdSlime.CMD_LABEL).setExecutor(new CmdSlime());
 		getCommand(CmdList.CMD_LABEL).setExecutor(new CmdList());
 		getCommand(CmdSpawner.CMD_LABEL).setExecutor(new CmdSpawner());
 		getCommand(CmdSpawner.CMD_LABEL).setTabCompleter(new SpawnerCmdTabCompleter());
-
 		getCommand(CmdBack.CMD_LABEL).setExecutor(new CmdBack());
 		getCommand(CmdHome.CMD_LABEL).setExecutor(new CmdHome());
 		getCommand(CmdSpawn.CMD_LABEL).setExecutor(new CmdSpawn());
@@ -131,13 +127,5 @@ public class ServerTools extends JavaPlugin {
 		getCommand(CmdTpaall.CMD_LABEL).setExecutor(new CmdTpaall());
 		getCommand(CmdTpaccept.CMD_LABEL).setExecutor(new CmdTpaccept());
 		getCommand(CmdTpdeny.CMD_LABEL).setExecutor(new CmdTpdeny());
-
-		UtilsAPI.sendActivationMessage(this.getClass(), true);
 	}
-
-	@Override
-	public void onDisable() {
-		UtilsAPI.sendActivationMessage(this.getClass(), false);
-	}
-
 }

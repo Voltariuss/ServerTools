@@ -71,6 +71,7 @@ messages:
       other_header_info_ip: 'Informations sur l''IP'
       other_pseudo: 'Pseudo'
       other_last_ip_know: 'Dernière IP connue'
+      other_host_address: 'IP'
       other_location: 'Localisation'
       other_last_connection: 'Dernière connexion'
       other_connected: '§aConnecté'
@@ -79,4 +80,16 @@ messages:
       error_invalid_input_or_unkown_target: 'Saisie incorrecte ou joueur/ip inconnu(e).'
     suicide:
       failure_message: 'Vous vous êtes suicidé...'
-    whois: 
+    whois:
+      other_header_info_player: 'Informations du joueur'
+      other_pseudo: 'Pseudo'
+      other_health: 'Vie'
+      other_hungry: 'Faim'
+      other_minecraft_level: 'Niveau'
+      other_world: 'Monde'
+      other_location: 'Position'
+      other_host_address: 'Adresse IP'
+      other_gamemode: 'Gamemode'
+      other_godmode: 'Godmode'
+      other_flymode: 'Flymode'
+      other_op: 'Op'

@@ -17,10 +17,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.controller.commands.info.CmdSeen;
+import fr.dornacraft.servertools.controller.commands.info.CmdWhois;
+import fr.dornacraft.servertools.controller.listeners.GodPlayerDamageListener;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
+import fr.voltariuss.simpledevapi.ConfigManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
@@ -84,7 +88,8 @@ public class PlayerManager {
 		}
 	}
 
-	public static void getInfoPlayer(CommandSender sender, OfflinePlayer player) throws SQLException, IOException {
+	public static void displayPlayerHostAddressInformations(CommandSender sender, OfflinePlayer player)
+			throws SQLException, IOException {
 		String hostAdress = getHostAddress(player);
 		String name = player.getName();
 		String country = null;
@@ -94,46 +99,94 @@ public class PlayerManager {
 		if (player.isOnline()) {
 			country = getCountry(player.getPlayer().getAddress());
 		}
-		sender.sendMessage(
-				Utils.getHeader(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_header_info_ip")));
-		sender.sendMessage(
-				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_pseudo"), name));
-		sender.sendMessage(Utils
-				.getNewLine(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_last_ip_know"), hostAdress));
-		sender.sendMessage(
-				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_location"), country));
-
 		HashMap<String, String> values = new HashMap<>();
 		values.put("Last_Connection_Time", lastConnectionTime);
-		sender.sendMessage(
-				Utils.getNewLine(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_last_connection"),
-						player.isOnline() ? ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_connected")
-								: ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_last_connection_time",
-										values)));
-		sender.sendMessage(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_list_players_with_same_ip"));
+
+		String header = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_header_info_ip");
+		String prefixPseudo = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_pseudo");
+		String prefixLastIpKnow = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_last_ip_know");
+		String prefixLocation = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_location");
+		String prefixLastConnection = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_last_connection");
+		String connected = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_connected");
+		String lastConnectionTimeStr = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
+				"other_last_connection_time", values);
+		String prefixListPlayersWithSameIp = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
+				"other_list_players_with_same_ip");
+
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getHeader(header));
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getNewLine(prefixPseudo, name));
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getNewLine(prefixLastIpKnow, hostAdress));
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getNewLine(prefixLocation, country));
+
+		if (player.isOnline()) {
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getNewLine(prefixLastConnection, connected));
+		} else {
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender,
+					Utils.getNewLine(prefixLastConnection, lastConnectionTimeStr));
+		}
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, prefixListPlayersWithSameIp);
 
 		for (String playerName : playersName) {
-			sender.sendMessage(" §e- §b" + playerName);
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, " §e- §b" + playerName);
 		}
 	}
 
-	public static void getInfoHostAddress(CommandSender sender, String hostAdress) throws SQLException {
+	public static void displayHostAddressInformations(CommandSender sender, String hostAdress) throws SQLException {
 		List<String> players = getPlayersName(hostAdress);
 
 		if (!players.isEmpty()) {
-			sender.sendMessage(
-					Utils.getHeader(ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_header_info_ip")));
-			sender.sendMessage(Utils.getNewLine("IP", hostAdress));
-			sender.sendMessage(
-					ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_list_players_with_same_ip"));
+			String header = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
+					"other_header_info_ip");
+			String prefixHostAddress = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_host_address");
+			String prefixListPlayersWithSameIp = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
+					"other_list_players_with_same_ip");
+
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getHeader(header));
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, Utils.getNewLine(prefixHostAddress, hostAdress));
+			UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, prefixListPlayersWithSameIp);
 
 			for (String player : players) {
-				sender.sendMessage(" §e- §b" + player);
+				UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, " §e- §b" + player);
 			}
 		} else {
-			UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender,
-					ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "error_invalid_input_or_unkown_target"));
+			String errorMessage = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
+					"error_invalid_input_or_unkown_target");
+			UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, errorMessage);
 		}
+	}
+
+	public static void displayGlobalPlayerInformations(CommandSender sender, Player target) {
+		String header = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL,
+				"other_header_info_player");
+		String prefixPseudo = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_pseudo");
+		String prefixHealth = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_health");
+		String prefixHungry = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_hungry");
+		String prefixMinecraftLevel = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL,
+				"other_minecraft_level");
+		String prefixWorld = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_world");
+		String prefixLocation = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL,
+				"other_location");
+		String prefixHostAddress = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL,
+				"other_host_address");
+		String prefixGamemode = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL,
+				"other_gamemode");
+		String prefixGodmode = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_godmode");
+		String prefixFlymode = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_flymode");
+		String prefixOp = ConfigManager.getCommandMessage(ServerTools.class, CmdWhois.CMD_LABEL, "other_op");
+
+		sender.sendMessage(Utils.getHeader(header));
+		sender.sendMessage(Utils.getNewLine(prefixPseudo, target.getDisplayName()));
+		sender.sendMessage(
+				Utils.getNewLine(prefixHealth, (int) target.getHealth() + "§7/§e" + (int) target.getHealthScale()));
+		sender.sendMessage(Utils.getNewLine(prefixHungry, target.getFoodLevel() + "§7/§e20"));
+		sender.sendMessage(Utils.getNewLine(prefixMinecraftLevel, Integer.toString(target.getLevel())));
+		sender.sendMessage(Utils.getNewLine(prefixWorld, target.getWorld().getName()));
+		sender.sendMessage(Utils.getNewLine(prefixLocation, Utils.getStrPosition(target.getLocation())));
+		sender.sendMessage(Utils.getNewLine(prefixHostAddress, target.getAddress().getAddress().getHostAddress()));
+		sender.sendMessage(Utils.getNewLine(prefixGamemode, target.getGameMode().name()));
+		sender.sendMessage(Utils.getNewLine(prefixGodmode, Utils.displayState(GodPlayerDamageListener.isGod(target))));
+		sender.sendMessage(Utils.getNewLine(prefixFlymode, Utils.displayState(target.getAllowFlight())));
+		sender.sendMessage(Utils.getNewLine(prefixOp, Utils.displayState(target.isOp())));
 	}
 
 	public static String getPing(Player player) {

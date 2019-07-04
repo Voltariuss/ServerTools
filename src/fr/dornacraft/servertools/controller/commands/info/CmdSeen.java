@@ -26,9 +26,9 @@ public class CmdSeen extends DornacraftCommand {
 				OfflinePlayer target = PlayerManager.getOfflinePlayerFromName(args[0]);
 
 				if (target != null) {
-					PlayerManager.getInfoPlayer(sender, target);
+					PlayerManager.displayPlayerHostAddressInformations(sender, target);
 				} else {
-					PlayerManager.getInfoHostAddress(sender, args[0]);
+					PlayerManager.displayHostAddressInformations(sender, args[0]);
 				}
 			}
 		};

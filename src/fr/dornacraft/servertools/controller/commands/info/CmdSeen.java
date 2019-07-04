@@ -41,7 +41,7 @@ public class CmdSeen extends DornacraftCommand {
 			}
 		};
 
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true),
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.STRING, true),
 				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc"), executor, null));
 	}
 

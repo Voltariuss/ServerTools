@@ -53,7 +53,7 @@ public class SQLPlayer {
 
 	public static void updateHostAddress(Player player) throws SQLException {
 		PreparedStatement query = SQLConnection.getInstance().getConnection()
-				.prepareStatement("UPDATE " + TABLE_NAME + " SET hostAddress = ? WHERE uuid = ?");
+				.prepareStatement("UPDATE " + TABLE_NAME + " SET host_address = ? WHERE uuid = ?");
 		query.setString(1, player.getAddress().getAddress().getHostAddress());
 		query.setString(2, player.getUniqueId().toString());
 		query.executeUpdate();
@@ -77,14 +77,14 @@ public class SQLPlayer {
 
 	public static String getHostAddress(OfflinePlayer player) throws SQLException {
 		PreparedStatement query = SQLConnection.getInstance().getConnection()
-				.prepareStatement("SELECT hostAddress FROM " + TABLE_NAME + " WHERE name = ?");
+				.prepareStatement("SELECT host_address FROM " + TABLE_NAME + " WHERE name = ?");
 		query.setString(1, player.getName());
 
 		ResultSet result = query.executeQuery();
 		String hostAddress = null;
 
 		while (result.next()) {
-			hostAddress = result.getString("hostAddress");
+			hostAddress = result.getString("host_address");
 		}
 		query.close();
 		return hostAddress;
@@ -92,7 +92,7 @@ public class SQLPlayer {
 
 	public static List<String> getPlayersName(String hostAddress) throws SQLException {
 		PreparedStatement query = SQLConnection.getInstance().getConnection()
-				.prepareStatement("SELECT name FROM " + TABLE_NAME + " WHERE hostAddress = ?");
+				.prepareStatement("SELECT name FROM " + TABLE_NAME + " WHERE host_address = ?");
 		query.setString(1, hostAddress);
 
 		ResultSet result = query.executeQuery();

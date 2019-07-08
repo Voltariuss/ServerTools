@@ -3,8 +3,10 @@ package fr.dornacraft.servertools.controller.commands.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -12,16 +14,19 @@ import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
+import fr.voltariuss.simpledevapi.cmds.InvalidArgumentsCommandException;
 
 public class CmdClear extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "clear";
 
+	private static final String ARG_INVENTORY = "inventory";
+	private static final String ARG_INVENTORY_CONTENT = "inventory_content";
+	private static final String ARG_ARMOR = "armor";
 	private static final String ARG_ENDERCHEST = "enderchest";
-	public static final String ARG_INVENTORY = "inventory";
+	private static final String ARG_ALL = "all";
 
-	private static final String DESC_ARG_INVENTORY = "Nettoie l'inventaire du joueur cible.";
-	private static final String DESC_ARG_ENDERCHEST = "Nettoie l'enderchest du joueur cible.";
+	public static final String CLEAR_TYPE_USAGE = "[inventory|inventory_content|armor|enderchest|all]";
 
 	public CmdClear() {
 		super(CMD_LABEL);
@@ -29,80 +34,65 @@ public class CmdClear extends DornacraftCommand {
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
-			public void execute(CommandSender sender, Command arg1, String arg2, String[] args) throws Exception {
-				// - /clear [enderchest|inventory] [player]
+			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
+				// - /clear [player] [inventory|inventory_content|armor|enderchest|all]
+				Player player = null;
 
-				if (args.length == 2) {
-					if (sender.hasPermission("dornacraft.essentials.clear.other")) {
-						Player target = Bukkit.getPlayer(args[1]);
-
-						if (target != null) {
-							if (args[0].equalsIgnoreCase(ARG_ENDERCHEST)) {
-								clearEnderchest(target);
-								UtilsAPI.sendSystemMessage(MessageLevel.INFO, target,
-										"Votre §6ender chest §ea été supprimé par §b%s§e.", sender.getName());
-								UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
-										"Vous avez supprimé §6l'ender chest §edu joueur §b%s§e.", target.getName());
-							} else if (args[0].equalsIgnoreCase(ARG_INVENTORY)) {
-								clearInventory(target);
-								UtilsAPI.sendSystemMessage(MessageLevel.INFO, target,
-										"Votre §6inventaire §ea été supprimé par §b%s§e.", sender.getName());
-								UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
-										"Vous avez supprimé §6l'inventaire §edu joueur §b%s§e.", target.getName());
-							}
-						} else {
-							UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, UtilsAPI.PLAYER_UNKNOW);
-						}
+				if (args.length == 0) {
+					if (sender instanceof ConsoleCommandSender) {
+						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
 					} else {
-						UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, UtilsAPI.PERMISSION_MISSING);
-					}
-				} else if (sender instanceof Player) {
-					if (args.length == 0) {
-						clearInventory((Player) sender);
-						UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
-								"Vous avez supprimé votre §6inventaire§e.");
-					} else if (args.length == 1) {
-						if (args[0].equalsIgnoreCase(ARG_ENDERCHEST)) {
-							clearEnderchest((Player) sender);
-							UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
-									"Vous avez supprimé votre §6ender chest§e.");
-
-						} else if (args[0].equalsIgnoreCase(ARG_INVENTORY)) {
-							clearInventory((Player) sender);
-							UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
-									"Vous avez supprimé votre §6inventaire§e.");
-						}
-
+						player = (Player) sender;
+						PlayerManager.clearInventory(sender, player, false);
 					}
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
+					String playerName = args[0];
+					player = Bukkit.getPlayer(playerName);
+
+					if (player == null) {
+						throw new InvalidArgumentsCommandException();
+					}
+
+					if (sender.getName().equalsIgnoreCase(playerName)
+							|| sender.hasPermission("dornacraft.essentials.clear.other")) {
+						if (args.length == 1) {
+							PlayerManager.clearInventory(sender, player, false);
+						} else {
+							String clearType = args[1];
+
+							switch (clearType) {
+							case ARG_INVENTORY:
+								PlayerManager.clearInventory(sender, player, false);
+								break;
+							case ARG_INVENTORY_CONTENT:
+								PlayerManager.clearInventoryContentOnly(sender, player, false);
+								break;
+							case ARG_ARMOR:
+								PlayerManager.clearArmor(sender, player, false);
+								break;
+							case ARG_ENDERCHEST:
+								PlayerManager.clearEnderChest(sender, player, false);
+								break;
+							case ARG_ALL:
+								PlayerManager.clearAll(sender, player, false);
+								break;
+							default:
+								throw new InvalidArgumentsCommandException();
+							}
+						}
+					} else {
+						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PERMISSION_MISSING);
+					}
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(ARG_ENDERCHEST, "ec"), DESC_ARG_ENDERCHEST, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), DESC_ARG_ENDERCHEST, executor,
-						null));
-
-		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(ARG_INVENTORY, "inv"), DESC_ARG_INVENTORY, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), DESC_ARG_INVENTORY, executor,
-						null));
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), "CLEAR_MESSAGE",
+						executor, null),
+				new CommandNode(
+						new CommandArgument(CommandArgumentType.STRING.getCustomArgType(CLEAR_TYPE_USAGE), false),
+						"CLEAR_MESSAGE", executor, null));
 
 	}
-
-	private void clearInventory(Player player) {
-		player.getInventory().clear();
-		player.getInventory().setHelmet(null);
-		player.getInventory().setChestplate(null);
-		player.getInventory().setLeggings(null);
-		player.getInventory().setBoots(null);
-	}
-
-	private void clearEnderchest(Player player) {
-		player.getEnderChest().clear();
-	}
-
 }

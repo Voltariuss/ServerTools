@@ -65,7 +65,7 @@ public class CmdFly extends DornacraftCommand {
 			}
 		};
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), DESC_ARG_PLAYER, executor,
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), DESC_ARG_PLAYER, executor,
 						null),
 				new CommandNode(new CommandArgument(new CommandArgumentType("on/off", checker), false), DESC_ARG_TOGGLE,
 						executor, "dornacraft.essentials.fly.other"));

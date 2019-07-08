@@ -62,6 +62,6 @@ public class CmdPing extends DornacraftCommand {
 		});
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), CMD_DESC, executor, null));
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), CMD_DESC, executor, null));
 	}
 }

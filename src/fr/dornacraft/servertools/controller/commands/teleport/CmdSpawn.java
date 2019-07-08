@@ -50,7 +50,7 @@ public final class CmdSpawn extends DornacraftCommand {
 		};
 
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false),
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false),
 				DESC_ARG_PLAYER, executor, TeleportManager.PERMISSION_TELEPORT_OTHERS));
 
 	}

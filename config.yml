@@ -7,7 +7,7 @@ spawn_location:
   z: 0.0
   pitch: 0.0
   yaw: 0.0
-  world: 'world'
+  world: "world"
 respawn_to_spawn_location: true
 
 # Informations about color management :
@@ -25,71 +25,102 @@ respawn_to_spawn_location: true
 # Note: §r (reset formatter) will reset the message color to the default color specific to each type of message
 # Example: Info message => "This message is yellow, §cRed now, §rYellow again"
 messages:
-  database_no_connection: 'Le plugin n''est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées.'
+  database_no_connection: "Le plugin n'est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées."
   commands:
     broadcast:
-      normal_prefix: '§7[§4§lAnnonce§7] §f'
+      normal_prefix: "§7[§4§lAnnonce§7] §f"
+    clear:
+      info_clear_all: "Votre inventaire et votre Enderchest ont été supprimés."
+      info_clear_all_himself: "Vous avez supprimé votre inventaire et votre Enderchest."
+      info_clear_all_by_other: "Votre inventaire et votre Enderchest ont été supprimés par §b{Sender}§r."
+      info_clear_all_player: "Vous avez supprimé l'inventaire et l'Enderchest du joueur §b{Target}§r."
+      info_clear_inventory: "Votre inventaire a été supprimé."
+      info_clear_inventory_himself: "Vous avez supprimé votre inventaire."
+      info_clear_inventory_by_other: "Votre inventaire a été supprimé par §b{Sender}§r."
+      info_clear_inventory_player: "Vous avez supprimé l'inventaire du joueur §b{Target}§r."
+      info_clear_inventory_content_only: "Le contenu du votre inventaire a été supprimé."
+      info_clear_inventory_content_only_himself: "Vous avez supprimé le contenu de votre inventaire."
+      info_clear_inventory_content_only_by_other: "Le contenu de votre inventaire a été supprimé par §b{Sender}§r."
+      info_clear_inventory_content_only_player: "Vous avez supprimé le contenu de l'inventaire du joueur §b{Target}§r."
+      info_clear_armor: "Votre armure a été supprimée."
+      info_clear_armor_himself: "Vous avez supprimé votre armure."
+      info_clear_armor_by_other: "Votre armure a été supprimée par §b{Sender}§r."
+      info_clear_armor_player: "Vous avez supprimé l'armure du joueur §b{Target}§r."
+      info_clear_enderchest: "Votre Enderchest a été supprimé."
+      info_clear_enderchest_himself: "Vous avez supprimé votre EnderChest."
+      info_clear_enderchest_by_other: "Votre EnderChest a été supprimé par §b{Sender}§r."
+      info_clear_enderchest_player: "Vous avez supprimé l'EnderChest du joueur §b{Target}§r."
+    feed:
+      info_feed: "Vous avez été rassasié."
+      info_feed_himself: "Vous vous êtes rassasié."
+      info_feed_by_other: "Vous avez été rassasié par §b{Sender}§r."
+      info_feed_player: "Vous avez rassisié le joueur §b{Target}§r."
     gc:
-      info_header: '§6+§r------------- §aETAT SERVEUR §r-------------§6+'
-      info_time_server_running: '§6Durée de fonctionnement : §c{Time_Running}'
-      info_current_tps: '§6TPS actuels : §c{Tps_Value} {Tps_Indicator}'
-      info_max_memory: '§6Mémoire maximale : §c{Max_Memory}§6 Mo'
-      info_used_memory: '§6Mémoire utilisée : §c{Used_Memory}§6 Mo'
-      info_free_memory: '§6Mémoire libre : §c{Max_Memory}§6 Mo'
-      info_world_template: '§6Monde §a{Name} §6"§c{Type}§6" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles'
-      info_footer: '§6+§r--------------------------------------§6+'
+      info_header: "§6+§r------------- §aETAT SERVEUR §r-------------§6+"
+      info_time_server_running: "§6Durée de fonctionnement : §c{Time_Running}"
+      info_current_tps: "§6TPS actuels : §c{Tps_Value} {Tps_Indicator}"
+      info_max_memory: "§6Mémoire maximale : §c{Max_Memory}§6 Mo"
+      info_used_memory: "§6Mémoire utilisée : §c{Used_Memory}§6 Mo"
+      info_free_memory: "§6Mémoire libre : §c{Max_Memory}§6 Mo"
+      info_world_template: "§6Monde §a{Name} §6\"§c{Type}§6\" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles"
+      info_footer: "§6+§r--------------------------------------§6+"
     hat:
-      cmd_arg_remove_desc: 'Retire votre chapeau'
-      info_remove_done: 'Vous avez retiré votre chapeau.'
-      success_message: 'L''item dans votre main est désormais sur votre tête.'
-      warning_remove_no_helmet: 'Vous n''êtes pas équipé de chapeau.'
-      warning_no_item_in_main_hand: 'Vous n''avez aucun item dans votre main principale.'
+      cmd_arg_remove_desc: "Retire votre chapeau"
+      info_remove_done: "Vous avez retiré votre chapeau."
+      success_message: "L'item dans votre main est désormais sur votre tête."
+      warning_remove_no_helmet: "Vous n'êtes pas équipé de chapeau."
+      warning_no_item_in_main_hand: "Vous n'avez aucun item dans votre main principale."
+    heal:
+      info_heal: "Vous avez été soigné."
+      info_heal_himself: "Vous vous êtes soigné."
+      info_heal_by_other: "Vous avez été soigné par §b{Sender}§r."
+      info_heal_player: "Vous avez soigné le joueur §b{Target}§r."
     killall:
-      cmd_arg_entities_desc: 'Spécifie le type d''entités à supprimer'
-      cmd_arg_target_world_desc: 'Spécifie le monde ciblé'
-      cmd_arg_radius_desc: 'Spécifie la portée de suppression des entités ciblées'
-      normal_all_type_name: 'entités'
-      normal_monsters_type_name: 'monstres'
-      normal_animals_type_name: 'animaux'
-      normal_ambient_type_name: 'mobs passifs'
-      normal_villagers_type_name: 'villageois'
-      normal_drops_type_name: 'items flottants'
-      normal_xp_type_name: 'orbes d''expérience'
-      normal_arrows_type_name: 'flèches'
-      info_killall_on_server: 'Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rsur le serveur.'
-      info_kill_all_in_world: 'Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World}§r.'
-      info_kill_all_in_world_with_radius: 'Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World} §rdans un rayon de §6{Radius} blocs§r.'
-      error_invalid_world: 'Le monde spécifié n''existe pas.'
-      error_invalid_entity_type: 'Le type d''entité spécifié est incorrect.'
+      cmd_arg_entities_desc: "Spécifie le type d'entités à supprimer"
+      cmd_arg_target_world_desc: "Spécifie le monde ciblé"
+      cmd_arg_radius_desc: "Spécifie la portée de suppression des entités ciblées"
+      normal_all_type_name: "entités"
+      normal_monsters_type_name: "monstres"
+      normal_animals_type_name: "animaux"
+      normal_ambient_type_name: "mobs passifs"
+      normal_villagers_type_name: "villageois"
+      normal_drops_type_name: "items flottants"
+      normal_xp_type_name: "orbes d'expérience"
+      normal_arrows_type_name: "flèches"
+      info_killall_on_server: "Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rsur le serveur."
+      info_kill_all_in_world: "Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World}§r."
+      info_kill_all_in_world_with_radius: "Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World} §rdans un rayon de §6{Radius} blocs§r."
+      error_invalid_world: "Le monde spécifié n'existe pas."
+      error_invalid_entity_type: "Le type d'entité spécifié est incorrect."
     ping:
-      cmd_desc: 'Vous indique la latence du joueur ciblé'
-      info_ping_himself: '§6Pong ! §8» {Ping} §ems'
-      info_ping_target: 'Temps de réponse du joueur §b{Player} §e: §c{Ping} ms'
+      cmd_desc: "Vous indique la latence du joueur ciblé"
+      info_ping_himself: "§6Pong ! §8» {Ping} §ems"
+      info_ping_target: "Temps de réponse du joueur §b{Player} §e: §c{Ping} ms"
     seen:
-      cmd_desc: 'Affiche les informations sur l''ip du joueur ciblé'
-      normal_unknow_tag: 'Inconnue'
-      other_header_info_ip: 'Informations sur l''IP'
-      other_pseudo: 'Pseudo'
-      other_last_ip_know: 'Dernière IP connue'
-      other_host_address: 'IP'
-      other_location: 'Localisation'
-      other_last_connection: 'Dernière connexion'
-      other_connected: '§aConnecté'
-      other_last_connection_time: 'Il y a {Last_Connection_Time}'
-      other_list_players_with_same_ip: '§6Liste des joueurs utilisant la même adresse IP :'
-      error_invalid_input_or_unkown_target: 'Saisie incorrecte ou joueur/ip inconnu(e).'
+      cmd_desc: "Affiche les informations sur l'ip du joueur ciblé"
+      normal_unknow_tag: "Inconnue"
+      other_header_info_ip: "Informations sur l'IP"
+      other_pseudo: "Pseudo"
+      other_last_ip_know: "Dernière IP connue"
+      other_host_address: "IP"
+      other_location: "Localisation"
+      other_last_connection: "Dernière connexion"
+      other_connected: "§aConnecté"
+      other_last_connection_time: "Il y a {Last_Connection_Time}"
+      other_list_players_with_same_ip: "§6Liste des joueurs utilisant la même adresse IP :"
+      error_invalid_input_or_unkown_target: "Saisie incorrecte ou joueur/ip inconnu(e)."
     suicide:
-      failure_message: 'Vous vous êtes suicidé...'
+      failure_message: "Vous vous êtes suicidé..."
     whois:
-      other_header_info_player: 'Informations du joueur'
-      other_pseudo: 'Pseudo'
-      other_health: 'Vie'
-      other_hungry: 'Faim'
-      other_minecraft_level: 'Niveau'
-      other_world: 'Monde'
-      other_location: 'Position'
-      other_host_address: 'Adresse IP'
-      other_gamemode: 'Gamemode'
-      other_godmode: 'Godmode'
-      other_flymode: 'Flymode'
-      other_op: 'Op'
+      other_header_info_player: "Informations du joueur"
+      other_pseudo: "Pseudo"
+      other_health: "Vie"
+      other_hungry: "Faim"
+      other_minecraft_level: "Niveau"
+      other_world: "Monde"
+      other_location: "Position"
+      other_host_address: "Adresse IP"
+      other_gamemode: "Gamemode"
+      other_godmode: "Godmode"
+      other_flymode: "Flymode"
+      other_op: "Op"

@@ -1,7 +1,13 @@
 package fr.dornacraft.servertools.utils;
 
-import org.bukkit.Location;
+import java.util.HashMap;
 
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+
+import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
 public class Utils {
@@ -56,4 +62,27 @@ public class Utils {
 	}
 
 	public static final String TELEPORT_SPAWN = "Téléportation au §cspawn§r.";
+
+	public static void displayFeedBackCommandAction(String cmdLabel, CommandSender sender, Player player,
+			String rootMessageId, boolean silent) {
+		if (!silent) {
+			String messageId = String.join("_", "info", rootMessageId);
+			HashMap<String, String> values = new HashMap<>();
+	
+			if (sender.getName().equalsIgnoreCase(player.getName())) {
+				messageId = String.join("_", messageId, "himself");
+			} else if (sender != null) {
+				values.put("Target", player.getName());
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
+				ServerToolsConfig.getCommandMessage(cmdLabel, String.join("_", messageId, "player"), values));
+				
+				if (!(sender instanceof ConsoleCommandSender)) {
+					values.put("Sender", sender.getName());
+					messageId = String.join("_", messageId, "by_other");
+				}
+			}
+			String message = ServerToolsConfig.getCommandMessage(cmdLabel, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
 }

@@ -128,19 +128,19 @@ public class CmdAdminExp extends DornacraftCommand {
 		// /adminexp set <player> <number>
 		getCmdTreeExecutor().addSubCommand(
 				new CommandNode(new CommandArgument(ARG_SET, ""), DESC_ARG_SET, executor_set, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true), DESC_ARG_PLAYER, executor, null),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_ARG_PLAYER, executor, null),
 				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_ARG_QTY, executor, null));
 
 		// /adminexp give <player> <number>
 		getCmdTreeExecutor().addSubCommand(
 				new CommandNode(new CommandArgument(ARG_GIVE, ""), DESC_ARG_GIVE, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true), DESC_ARG_PLAYER, executor, null),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_ARG_PLAYER, executor, null),
 				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_ARG_QTY, executor, null));
 
 		// /adminexp take <player> <number>
 		getCmdTreeExecutor().addSubCommand(
 				new CommandNode(new CommandArgument(ARG_TAKE, ""), DESC_ARG_TAKE, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true), DESC_ARG_PLAYER, executor, null),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_ARG_PLAYER, executor, null),
 				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_ARG_QTY, executor, null));
 	}
 

@@ -16,10 +16,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.controller.commands.info.CmdSeen;
 import fr.dornacraft.servertools.controller.commands.info.CmdWhois;
+import fr.dornacraft.servertools.controller.commands.player.CmdFeed;
+import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
+import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
 import fr.dornacraft.servertools.controller.listeners.GodPlayerDamageListener;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
@@ -135,8 +139,7 @@ public class PlayerManager {
 		List<String> players = getPlayersName(hostAdress);
 
 		if (!players.isEmpty()) {
-			String header = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
-					"other_header_info_ip");
+			String header = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_header_info_ip");
 			String prefixHostAddress = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL, "other_host_address");
 			String prefixListPlayersWithSameIp = ServerToolsConfig.getCommandMessage(CmdSeen.CMD_LABEL,
 					"other_list_players_with_same_ip");
@@ -178,7 +181,7 @@ public class PlayerManager {
 		sender.sendMessage(Utils.getNewLine(prefixPseudo, target.getDisplayName()));
 		sender.sendMessage(
 				Utils.getNewLine(prefixHealth, (int) target.getHealth() + "§7/§e" + (int) target.getHealthScale()));
-		sender.sendMessage(Utils.getNewLine(prefixHungry, target.getFoodLevel() + "§7/§e20"));
+		sender.sendMessage(Utils.getNewLine(prefixHungry, (int) (target.getFoodLevel() + target.getSaturation()) + "§7/§e20"));
 		sender.sendMessage(Utils.getNewLine(prefixMinecraftLevel, Integer.toString(target.getLevel())));
 		sender.sendMessage(Utils.getNewLine(prefixWorld, target.getWorld().getName()));
 		sender.sendMessage(Utils.getNewLine(prefixLocation, Utils.getStrPosition(target.getLocation())));
@@ -205,5 +208,58 @@ public class PlayerManager {
 			pingColor = ChatColor.DARK_RED;
 		}
 		return pingColor.toString() + ping;
+	}
+
+	public static void heal(CommandSender sender, Player player, boolean silent) {
+		player.setHealth(player.getHealthScale());
+		player.setFireTicks(0);
+		player.setRemainingAir(player.getMaximumAir());
+		feed(sender, player, true);
+
+		for (PotionEffect potionEffect : player.getActivePotionEffects()) {
+			player.removePotionEffect(potionEffect.getType());
+		}
+		Utils.displayFeedBackCommandAction(CmdHeal.CMD_LABEL, sender, player, "heal", silent);
+	}
+
+	public static void feed(CommandSender sender, Player player, boolean silent) {
+		player.setExhaustion(0);
+		player.setSaturation(5);
+		player.setFoodLevel(20);
+		Utils.displayFeedBackCommandAction(CmdFeed.CMD_LABEL, sender, player, "feed", silent);
+	}
+
+	public static void displayExp(CommandSender sender, Player player) {
+		// TODO
+	}
+
+	public static void clearAll(CommandSender sender, Player player, boolean silent) {
+		clearInventory(sender, player, true);
+		clearEnderChest(sender, player, true);
+		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_all", silent);
+	}
+
+	public static void clearInventory(CommandSender sender, Player player, boolean silent) {
+		clearInventoryContentOnly(sender, player, true);
+		clearArmor(sender, player, true);
+		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_inventory", silent);
+	}
+
+	public static void clearInventoryContentOnly(CommandSender sender, Player player, boolean silent) {
+		player.getInventory().clear();
+		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_inventory_content_only", silent);
+	}
+
+	public static void clearArmor(CommandSender sender, Player player, boolean silent) {
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_armor", silent);
+	}
+
+	public static void clearEnderChest(CommandSender sender, Player player, boolean silent) {
+		player.getEnderChest().clear();
+		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_enderchest", silent);
 	}
 }

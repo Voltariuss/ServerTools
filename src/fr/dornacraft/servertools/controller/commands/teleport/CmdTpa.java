@@ -45,7 +45,7 @@ public class CmdTpa extends DornacraftCommand {
 			}
 		};
 
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, true),
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true),
 				DESC_ARG_PLAYER, executor, null));
 	}
 }

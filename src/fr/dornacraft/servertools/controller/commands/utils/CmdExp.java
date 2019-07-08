@@ -23,7 +23,7 @@ public class CmdExp extends DornacraftCommand {
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
-			public void execute(CommandSender sender, Command arg1, String arg2, String[] args) throws Exception {
+			public void execute(CommandSender sender, Command cmd, String msg, String[] args) throws Exception {
 				if (args.length == 0 || args[0].equalsIgnoreCase(sender.getName())) {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
@@ -49,6 +49,6 @@ public class CmdExp extends DornacraftCommand {
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false), DESC_CMD, executor, null));
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), DESC_CMD, executor, null));
 	}
 }

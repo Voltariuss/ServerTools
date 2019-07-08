@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
+import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -13,6 +13,7 @@ import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
+import fr.voltariuss.simpledevapi.cmds.InvalidArgumentsCommandException;
 
 public class CmdHeal extends DornacraftCommand {
 
@@ -26,43 +27,29 @@ public class CmdHeal extends DornacraftCommand {
 
 			@Override
 			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
-				if (args.length == 0 || args[0].equalsIgnoreCase(sender.getName())) {
-					if (sender instanceof Player || args.length > 0 && args[0].equalsIgnoreCase(sender.getName())) {
-						Player player = (Player) sender;
-						heal(player);
-						UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, "§eVous avez été soigné.");
-					} else {
-						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
-					}
-				} else {
-					Player target = Bukkit.getPlayer(args[0]);
+				CommandSender healer = sender;
+				Player target = null;
 
-					if (target != null) {
-						heal(target);
-						UtilsAPI.sendSystemMessage(MessageLevel.INFO, target, "Vous avez été soigné par §b%s§e.",
-								sender.getName());
-						UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, "Vous avez soigné le joueur §b%s§e.",
-								target.getDisplayName());
-					} else {
-						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PLAYER_UNKNOW);
+				if (args.length == 1) {
+					String playerName = args[0];
+					target = Bukkit.getPlayer(playerName);
+
+					if (target == null) {
+						throw new InvalidArgumentsCommandException();
 					}
+				} else if (sender instanceof Player) {
+					target = (Player) sender;
+				} 
+				
+				if (sender instanceof Player || args.length == 1) {
+					PlayerManager.heal(healer, target, false);
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.PLAYER, false),
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false),
 				DESC_ARG_PLAYER, executor, "dornacraft.essentials.heal.other"));
-	}
-
-	public static void heal(Player player) {
-		player.setHealth(player.getHealthScale());
-		player.setFireTicks(0);
-		player.setRemainingAir(player.getMaximumAir());
-		CmdFeed.feed(player);
-
-		for (PotionEffect potionEffect : player.getActivePotionEffects()) {
-			player.removePotionEffect(potionEffect.getType());
-		}
 	}
 }

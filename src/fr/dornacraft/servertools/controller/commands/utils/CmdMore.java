@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
@@ -20,21 +21,22 @@ public class CmdMore extends DornacraftCommand {
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
-			public void execute(CommandSender sender, Command arg1, String arg2, String[] args) throws Exception {
+			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
-					ItemStack item = player.getItemOnCursor();
+					ItemStack item = player.getInventory().getItemInMainHand();
 
 					if (item != null && item.getType() != Material.AIR) {
-						if (item.getAmount() < item.getMaxStackSize()) {
-							item.setAmount(item.getMaxStackSize());
-							player.setItemOnCursor(item);
+						if (item.getAmount() < 64) {
+							item.setAmount(64);
+							player.getInventory().setItemInMainHand(item);
 						} else {
-							UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, "Votre stack est déjà plein.");
+							UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender,
+									ServerToolsConfig.getCommandMessage(CMD_LABEL, "failure_slot_already_full"));
 						}
 					} else {
-						UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender,
-								"Vous n'avez pas d'item dans votre main.");
+						UtilsAPI.sendSystemMessage(MessageLevel.WARNING, sender,
+								ServerToolsConfig.getCommandMessage(CMD_LABEL, "warning_no_item_in_main_hand"));
 					}
 				} else {
 					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);

@@ -92,6 +92,9 @@ messages:
       info_kill_all_in_world_with_radius: "Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World} §rdans un rayon de §6{Radius} blocs§r."
       error_invalid_world: "Le monde spécifié n'existe pas."
       error_invalid_entity_type: "Le type d'entité spécifié est incorrect."
+    more:
+      failure_slot_already_full: "Votre slot est déjà plein."
+      warning_no_item_in_main_hand: "Vous n'avez pas d'item dans votre main."
     ping:
       cmd_desc: "Vous indique la latence du joueur ciblé"
       info_ping_himself: "§6Pong ! §8» {Ping} §ems"

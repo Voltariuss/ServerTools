@@ -50,6 +50,8 @@ messages:
       info_clear_enderchest_himself: "Vous avez supprimé votre EnderChest."
       info_clear_enderchest_by_other: "Votre EnderChest a été supprimé par §b{Sender}§r."
       info_clear_enderchest_player: "Vous avez supprimé l'EnderChest du joueur §b{Target}§r."
+    craft:
+      info_open_workbench: "Ouverture de la table de craft..."
     feed:
       info_feed: "Vous avez été rassasié."
       info_feed_himself: "Vous vous êtes rassasié."

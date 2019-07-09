@@ -13,6 +13,7 @@ import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
+import fr.voltariuss.simpledevapi.cmds.InvalidArgumentsCommandException;
 
 public class CmdFly extends DornacraftCommand {
 
@@ -56,11 +57,9 @@ public class CmdFly extends DornacraftCommand {
 		CommandArgumentChecker checker = new CommandArgumentChecker() {
 
 			@Override
-			public boolean check(String str) {
-				if (str.equalsIgnoreCase("on") || str.equalsIgnoreCase("off")) {
-					return true;
-				} else {
-					return false;
+			public void check(String str) throws InvalidArgumentsCommandException {
+				if (!str.equalsIgnoreCase("on") && !str.equalsIgnoreCase("off")) {
+					throw new InvalidArgumentsCommandException();
 				}
 			}
 		};

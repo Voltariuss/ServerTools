@@ -16,6 +16,7 @@ import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
+import fr.voltariuss.simpledevapi.cmds.InvalidArgumentsCommandException;
 
 public class CmdGamemode extends DornacraftCommand {
 
@@ -64,11 +65,9 @@ public class CmdGamemode extends DornacraftCommand {
 		CommandArgumentChecker checker = new CommandArgumentChecker() {
 
 			@Override
-			public boolean check(String str) {
-				if (argsList.containsKey(str)) {
-					return true;
-				} else {
-					return false;
+			public void check(String str) throws InvalidArgumentsCommandException {
+				if (!argsList.containsKey(str)) {
+					throw new InvalidArgumentsCommandException();
 				}
 			}
 		};

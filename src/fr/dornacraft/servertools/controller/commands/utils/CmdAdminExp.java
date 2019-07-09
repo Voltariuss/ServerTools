@@ -45,12 +45,12 @@ public class CmdAdminExp extends DornacraftCommand {
 				// - /adminexp <set|give|take> <player> <number>
 				Player player = Bukkit.getPlayer(args[1]);
 
-				if (Integer.parseInt(args[2]) < 0) {
-					throw new DornacraftCommandException(UtilsAPI.NUMBER_MUST_BE_POSITIVE);
-				}
-
 				if (args[2].toLowerCase().charAt(args[2].length() - 1) == 'l') {
-					int level = Integer.parseInt(args[2].substring(0, args[2].length() - 2));
+					int level = Integer.parseInt(args[2].substring(0, args[2].length() - 1));
+
+					if (level < 0) {
+						throw new DornacraftCommandException(UtilsAPI.NUMBER_MUST_BE_POSITIVE);
+					}
 
 					if (args[0].equalsIgnoreCase(ARG_SET)) {
 						PlayerManager.setLevel(sender, player, level, false);
@@ -62,28 +62,32 @@ public class CmdAdminExp extends DornacraftCommand {
 				} else {
 					int exp = Integer.parseInt(args[2]);
 
+					if (exp < 0) {
+						throw new DornacraftCommandException(UtilsAPI.NUMBER_MUST_BE_POSITIVE);
+					}
+
 					if (args[0].equalsIgnoreCase(ARG_SET)) {
-						PlayerManager.setExp(sender, player, exp, false);
+						PlayerManager.setExperience(sender, player, exp, false);
 					} else if (args[0].equalsIgnoreCase(ARG_GIVE)) {
-						PlayerManager.giveExp(sender, player, exp, false);
+						PlayerManager.giveExperience(sender, player, exp, false);
 					} else {
-						PlayerManager.takeExp(sender, player, exp, false);
+						PlayerManager.takeExperience(sender, player, exp, false);
 					}
 				}
 			}
 		};
 		// /adminexp set <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_SET), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_SET), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
 		// /adminexp give <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_GIVE), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_GIVE), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
 		// /adminexp take <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_TAKE), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD, executor, null),
-				new CommandNode(new CommandArgument(CommandArgumentType.NUMBER, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_TAKE), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
 	}
 
 }

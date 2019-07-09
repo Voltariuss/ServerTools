@@ -35,7 +35,7 @@ public class CmdExp extends DornacraftCommand {
 				} else {
 					throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
-				PlayerManager.displayExp(sender, player);
+				PlayerManager.displayExperience(sender, player);
 			}
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);

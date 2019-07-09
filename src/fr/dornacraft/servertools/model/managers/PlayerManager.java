@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -263,12 +264,13 @@ public class PlayerManager {
 		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_enderchest", silent);
 	}
 
-	public static void displayExp(CommandSender sender, Player player) {
+	public static void displayExperience(CommandSender sender, Player player) {
 		HashMap<String, String> values = new HashMap<>();
 		values.put("Target", player.getName());
 		values.put("Level", Integer.toString(player.getLevel()));
-		values.put("Amount_Exp", Integer.toString((int) (player.getExp() * player.getExpToLevel())));
+		values.put("Amount_Exp", Integer.toString(Math.round(player.getExp() * player.getExpToLevel())));
 		values.put("Amount_Exp_To_LevelUp", Integer.toString(player.getExpToLevel()));
+		values.put("Total_Amount_Exp", Integer.toString(ExperienceManager.getTotalExperience(player)));
 		String messageId = "info_current_level";
 
 		if (sender.getName().equalsIgnoreCase(player.getName())) {
@@ -278,13 +280,14 @@ public class PlayerManager {
 		UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, message);
 	}
 
-	public static void setExp(CommandSender sender, Player player, int exp, boolean silent) {
-		player.setTotalExperience(exp);
+	public static void setExperience(CommandSender sender, Player player, int xp, boolean silent) {
+		ExperienceManager.setTotalExperience(player, xp);
+		player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
 		if (!silent) {
 			String messageId = null;
 			HashMap<String, String> values = new HashMap<>();
-			values.put("Amount", Integer.toString(exp));
+			values.put("Amount", Integer.toString(xp));
 
 			if (!sender.getName().equalsIgnoreCase(player.getName())) {
 				values.put("Target", player.getName());
@@ -303,10 +306,10 @@ public class PlayerManager {
 		}
 	}
 
-	public static void giveExp(CommandSender sender, Player player, int amount, boolean silent) {
-		int playerExp = player.getTotalExperience();
-		int newExp = playerExp + amount;
-		setExp(sender, player, newExp, true);
+	public static void giveExperience(CommandSender sender, Player player, int amount, boolean silent) {
+		System.out.println(ExperienceManager.getTotalExperience(15));
+		int newXp = ExperienceManager.getTotalExperience(player) + amount;
+		setExperience(sender, player, newXp, true);
 
 		if (!silent) {
 			String messageId = null;
@@ -330,14 +333,13 @@ public class PlayerManager {
 		}
 	}
 
-	public static void takeExp(CommandSender sender, Player player, int amount, boolean silent) {
-		int playerExp = player.getTotalExperience();
-		int newExp = playerExp - amount;
+	public static void takeExperience(CommandSender sender, Player player, int amount, boolean silent) {
+		int newXp = ExperienceManager.getTotalExperience(player) - amount;
 
-		if (newExp < 0) {
-			newExp = 0;
+		if (newXp < 0) {
+			newXp = 0;
 		}
-		setExp(sender, player, newExp, true);
+		setExperience(sender, player, newXp, true);
 		
 		if (!silent) {
 			String messageId = null;
@@ -363,6 +365,7 @@ public class PlayerManager {
 
 	public static void setLevel(CommandSender sender, Player player, int level, boolean silent) {
 		player.setLevel(level);
+		player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
 		if (!silent) {
 			String messageId = null;

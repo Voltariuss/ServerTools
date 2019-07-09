@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,7 +24,9 @@ import fr.dornacraft.servertools.controller.commands.info.CmdSeen;
 import fr.dornacraft.servertools.controller.commands.info.CmdWhois;
 import fr.dornacraft.servertools.controller.commands.player.CmdFeed;
 import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
+import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
+import fr.dornacraft.servertools.controller.commands.utils.CmdExp;
 import fr.dornacraft.servertools.controller.listeners.GodPlayerDamageListener;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
@@ -181,7 +184,8 @@ public class PlayerManager {
 		sender.sendMessage(Utils.getNewLine(prefixPseudo, target.getDisplayName()));
 		sender.sendMessage(
 				Utils.getNewLine(prefixHealth, (int) target.getHealth() + "§7/§e" + (int) target.getHealthScale()));
-		sender.sendMessage(Utils.getNewLine(prefixHungry, (int) (target.getFoodLevel() + target.getSaturation()) + "§7/§e20"));
+		sender.sendMessage(
+				Utils.getNewLine(prefixHungry, (int) (target.getFoodLevel() + target.getSaturation()) + "§7/§e20"));
 		sender.sendMessage(Utils.getNewLine(prefixMinecraftLevel, Integer.toString(target.getLevel())));
 		sender.sendMessage(Utils.getNewLine(prefixWorld, target.getWorld().getName()));
 		sender.sendMessage(Utils.getNewLine(prefixLocation, Utils.getStrPosition(target.getLocation())));
@@ -229,10 +233,6 @@ public class PlayerManager {
 		Utils.displayFeedBackCommandAction(CmdFeed.CMD_LABEL, sender, player, "feed", silent);
 	}
 
-	public static void displayExp(CommandSender sender, Player player) {
-		// TODO
-	}
-
 	public static void clearAll(CommandSender sender, Player player, boolean silent) {
 		clearInventory(sender, player, true);
 		clearEnderChest(sender, player, true);
@@ -261,5 +261,186 @@ public class PlayerManager {
 	public static void clearEnderChest(CommandSender sender, Player player, boolean silent) {
 		player.getEnderChest().clear();
 		Utils.displayFeedBackCommandAction(CmdClear.CMD_LABEL, sender, player, "clear_enderchest", silent);
+	}
+
+	public static void displayExp(CommandSender sender, Player player) {
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Target", player.getName());
+		values.put("Level", Integer.toString(player.getLevel()));
+		values.put("Amount_Exp", Integer.toString((int) (player.getExp() * player.getExpToLevel())));
+		values.put("Amount_Exp_To_LevelUp", Integer.toString(player.getExpToLevel()));
+		String messageId = "info_current_level";
+
+		if (sender.getName().equalsIgnoreCase(player.getName())) {
+			messageId = "info_current_level_himself";
+		}
+		String message = ServerToolsConfig.getCommandMessage(CmdExp.CMD_LABEL, messageId);
+		UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, message);
+	}
+
+	public static void setExp(CommandSender sender, Player player, int exp, boolean silent) {
+		player.setTotalExperience(exp);
+
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(exp));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_set_exp");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_change_exp";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_change_exp_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
+
+	public static void giveExp(CommandSender sender, Player player, int amount, boolean silent) {
+		int playerExp = player.getTotalExperience();
+		int newExp = playerExp + amount;
+		setExp(sender, player, newExp, true);
+
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(amount));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_exp", values);
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_receive_exp";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_receive_exp_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
+
+	public static void takeExp(CommandSender sender, Player player, int amount, boolean silent) {
+		int playerExp = player.getTotalExperience();
+		int newExp = playerExp - amount;
+
+		if (newExp < 0) {
+			newExp = 0;
+		}
+		setExp(sender, player, newExp, true);
+		
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(amount));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_exp", values);
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_lose_exp";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_lose_exp_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
+
+	public static void setLevel(CommandSender sender, Player player, int level, boolean silent) {
+		player.setLevel(level);
+
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(level));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_set_level");
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_change_level";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_change_level_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
+
+	public static void giveLevel(CommandSender sender, Player player, int amount, boolean silent) {
+		int playerLevel = player.getLevel();
+		int newLevel = playerLevel + amount;
+		setLevel(sender, player, newLevel, true);
+
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(amount));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_level", values);
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_receive_level";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_receive_level_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
+	}
+
+	public static void takeLevel(CommandSender sender, Player player, int amount, boolean silent) {
+		int playerLevel = player.getLevel();
+		int newLevel = playerLevel - amount;
+
+		if (newLevel < 0) {
+			newLevel = 0;
+		}
+		setLevel(sender, player, newLevel, true);
+		
+		if (!silent) {
+			String messageId = null;
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Amount", Integer.toString(amount));
+
+			if (!sender.getName().equalsIgnoreCase(player.getName())) {
+				values.put("Target", player.getName());
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_level", values);
+				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
+			}
+
+			if (sender.getName().equalsIgnoreCase(player.getName()) || sender instanceof ConsoleCommandSender) {
+				messageId = "info_lose_level";
+			} else {
+				values.put("Sender", sender.getName());
+				messageId = "info_lose_level_by_other";
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
+		}
 	}
 }

@@ -71,7 +71,7 @@ public class Utils {
 	
 			if (sender.getName().equalsIgnoreCase(player.getName())) {
 				messageId = String.join("_", messageId, "himself");
-			} else if (sender != null) {
+			} else {
 				values.put("Target", player.getName());
 				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender,
 				ServerToolsConfig.getCommandMessage(cmdLabel, String.join("_", messageId, "player"), values));

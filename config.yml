@@ -27,6 +27,26 @@ respawn_to_spawn_location: true
 messages:
   database_no_connection: "Le plugin n'est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées."
   commands:
+    adminexp:
+      cmd_desc: "Modifie l'expérience du joueur ciblé"
+      info_set_exp: "Le joueur §b{Target} §ra désormais §6{Amount} point(s) d'expérience§r."
+      info_set_level: "Le joueur §b{Target} §ra désormais §6{Amount} niveau(x) d'expérience§r."
+      info_change_exp: "Vous avez désormais §6{Amount} point(s) d'expérience."
+      info_change_level: "Vous avez désormais §6{Amount} niveau(x) d'expérience."
+      info_change_exp_by_other: "§b{Sender} §ra défini votre quantité de points d'expérience sur §6{Amount}§r."
+      info_change_level_by_other: "§b{Sender} §ra défini votre niveau d'expérience sur §6{Amount}§r."
+      info_give_exp: "Vous avez donné §6{Amount} point(s) d'expérience §rau joueur §b{Target}§r."
+      info_give_level: "Vous avez donné §6{Amount} niveau(x) d'expérience §rau joueur §b{Target}§r."
+      info_receive_exp: "Vous avez reçu §6{Amount} point(s) d'expérience§r."
+      info_receive_level: "Vous avez reçu §6{Amount} niveau(x) d'expérience§r."
+      info_receive_exp_by_other: "§b{Sender} §rvous a donné §6{Amount} point(s) d'expérience§r."
+      info_receive_level_by_other: "§b{Sender} §rvous a donné §6{Amount} niveau(x) d'expérience§r."
+      info_take_exp: "Vous avez retiré §6{Amount} point(s) d'expérience §rau joueur §b{Target}§r."
+      info_take_level: "Vous avez retiré §6{Amount} niveau(x) d'expérience §rau joueur §b{Target}§r."
+      info_lose_exp: "Vous avez perdu §6{Amount} point(s) d'expérience§r."
+      info_lose_level: "Vous avez perdu §6{Amount} niveau(x) d'expérience§r."
+      info_lose_exp_by_other: "§b{Sender} §rvous a retiré §6{Amount} point(s) d'expérience§r."
+      info_lose_level_by_other: "§b{Sender} §rvous a retiré §6{Amount_} niveau(x) d'expérience§r."
     broadcast:
       normal_prefix: "§7[§4§lAnnonce§7] §f"
     clear:
@@ -52,6 +72,9 @@ messages:
       info_clear_enderchest_player: "Vous avez supprimé l'EnderChest du joueur §b{Target}§r."
     craft:
       info_open_workbench: "Ouverture de la table de craft..."
+    exp:
+      info_current_level: "Niveau d'expérience du joueur §b{Target} §r: §6{Level} §8§o(§6§o{Amount_Exp}§7§o/§6§o{Amount_Exp_To_LevelUp} xp§8§o)"
+      info_current_level_himself: "Votre niveau d'expérience §r: §6{Level} §8§o(§6§o{Amount_Exp}§7§o/§6§o{Amount_Exp_To_LevelUp} xp§8§o)"
     feed:
       info_feed: "Vous avez été rassasié."
       info_feed_himself: "Vous vous êtes rassasié."

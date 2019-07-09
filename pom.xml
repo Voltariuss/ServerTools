@@ -7,7 +7,7 @@
 	<!-- ===== Maven Informations ===== -->
 	<groupId>fr.dornacraft.servertools</groupId>
 	<artifactId>server-tools</artifactId>
-	<version>0.4.4-SNAPSHOT</version>
+	<version>0.4.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<!-- ===== Global Informations ===== -->
@@ -87,11 +87,12 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
 			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>fr.voltariuss.simpledevapi</groupId>
 			<artifactId>simple-dev-api</artifactId>
-			<version>1.6.2</version>
+			<version>1.6.3</version>
 			<scope>provided</scope>
 		</dependency>	
 	</dependencies>

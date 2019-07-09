@@ -274,7 +274,7 @@ public class PlayerManager {
 		if (sender.getName().equalsIgnoreCase(player.getName())) {
 			messageId = "info_current_level_himself";
 		}
-		String message = ServerToolsConfig.getCommandMessage(CmdExp.CMD_LABEL, messageId);
+		String message = ServerToolsConfig.getCommandMessage(CmdExp.CMD_LABEL, messageId, values);
 		UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, message);
 	}
 

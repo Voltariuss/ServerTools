@@ -28,7 +28,6 @@ import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
 import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
 import fr.dornacraft.servertools.controller.commands.utils.CmdExp;
-import fr.dornacraft.servertools.controller.listeners.GodPlayerDamageListener;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
@@ -192,7 +191,7 @@ public class PlayerManager {
 		sender.sendMessage(Utils.getNewLine(prefixLocation, Utils.getStrPosition(target.getLocation())));
 		sender.sendMessage(Utils.getNewLine(prefixHostAddress, target.getAddress().getAddress().getHostAddress()));
 		sender.sendMessage(Utils.getNewLine(prefixGamemode, target.getGameMode().name()));
-		sender.sendMessage(Utils.getNewLine(prefixGodmode, Utils.displayState(GodPlayerDamageListener.isGod(target))));
+		sender.sendMessage(Utils.getNewLine(prefixGodmode, Utils.displayState(GodPlayerManager.getInstance().isGod(target))));
 		sender.sendMessage(Utils.getNewLine(prefixFlymode, Utils.displayState(target.getAllowFlight())));
 		sender.sendMessage(Utils.getNewLine(prefixOp, Utils.displayState(target.isOp())));
 	}

@@ -50,6 +50,7 @@ messages:
     broadcast:
       normal_prefix: "§7[§4§lAnnonce§7] §f"
     clear:
+      cmd_desc: "Supprime l'inventaire spécifié du joueur ciblé"
       info_clear_all: "Votre inventaire et votre Enderchest ont été supprimés."
       info_clear_all_himself: "Vous avez supprimé votre inventaire et votre Enderchest."
       info_clear_all_by_other: "Votre inventaire et votre Enderchest ont été supprimés par §b{Sender}§r."
@@ -89,6 +90,16 @@ messages:
       info_free_memory: "§6Mémoire libre : §c{Max_Memory}§6 Mo"
       info_world_template: "§6Monde §a{Name} §6\"§c{Type}§6\" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles"
       info_footer: "§6+§r--------------------------------------§6+"
+    god:
+      cmd_desc: "Active/Désactive le mode invincible pour le joueur ciblé"
+      normal_god_mode_state_enabled: "§a§lactivé"
+      normal_god_mode_state_disabled: "§c§ldésactivé"
+      info_god_mode_activate_target: "Vous avez {State} §ele mode §6God §eau joueur §b{Target}§e."
+      info_god_mode_activate: "Mode §6God {State}§e."
+      info_god_mode_activate_by_other: "Mode §6God {State} §epar §b{Sender}§e."
+      info_god_mode_activate_by_himself: "Vous avez {State} §evotre mode §6God§e."
+      failure_god_mode_already_in_this_state: "Mode §6God §edéjà %s §epour §b{State}§e."
+      failure_god_mode_already_in_this_state_himself: "Votre mode §6God §eest déjà {State}§e."
     hat:
       cmd_arg_remove_desc: "Retire votre chapeau"
       info_remove_done: "Vous avez retiré votre chapeau."

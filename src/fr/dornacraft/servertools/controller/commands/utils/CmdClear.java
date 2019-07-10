@@ -7,6 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import fr.dornacraft.servertools.model.managers.PlayerManager;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -26,7 +27,8 @@ public class CmdClear extends DornacraftCommand {
 	private static final String ARG_ENDERCHEST = "enderchest";
 	private static final String ARG_ALL = "all";
 
-	public static final String CLEAR_TYPE_USAGE = "[inventory|inventory_content|armor|enderchest|all]";
+	public static final String CMD_DESC = ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc");
+	public static final String CLEAR_TYPE_USAGE = "inventory|inventory_content|armor|enderchest|all";
 
 	public CmdClear() {
 		super(CMD_LABEL);
@@ -88,11 +90,11 @@ public class CmdClear extends DornacraftCommand {
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), "CLEAR_MESSAGE",
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), CMD_DESC,
 						executor, null),
 				new CommandNode(
 						new CommandArgument(CommandArgumentType.STRING.getCustomArgType(CLEAR_TYPE_USAGE), false),
-						"CLEAR_MESSAGE", executor, null));
+						CMD_DESC, executor, null));
 
 	}
 }

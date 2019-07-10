@@ -24,6 +24,7 @@ import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.controller.commands.info.CmdSeen;
 import fr.dornacraft.servertools.controller.commands.info.CmdWhois;
 import fr.dornacraft.servertools.controller.commands.player.CmdFeed;
+import fr.dornacraft.servertools.controller.commands.player.CmdFly;
 import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
 import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
@@ -191,7 +192,8 @@ public class PlayerManager {
 		sender.sendMessage(Utils.getNewLine(prefixLocation, Utils.getStrPosition(target.getLocation())));
 		sender.sendMessage(Utils.getNewLine(prefixHostAddress, target.getAddress().getAddress().getHostAddress()));
 		sender.sendMessage(Utils.getNewLine(prefixGamemode, target.getGameMode().name()));
-		sender.sendMessage(Utils.getNewLine(prefixGodmode, Utils.displayState(GodPlayerManager.getInstance().isGod(target))));
+		sender.sendMessage(
+				Utils.getNewLine(prefixGodmode, Utils.displayState(GodPlayerManager.getInstance().isGod(target))));
 		sender.sendMessage(Utils.getNewLine(prefixFlymode, Utils.displayState(target.getAllowFlight())));
 		sender.sendMessage(Utils.getNewLine(prefixOp, Utils.displayState(target.isOp())));
 	}
@@ -317,7 +319,8 @@ public class PlayerManager {
 
 			if (!sender.getName().equalsIgnoreCase(player.getName())) {
 				values.put("Target", player.getName());
-				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_exp", values);
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_exp",
+						values);
 				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
 			}
 
@@ -339,7 +342,7 @@ public class PlayerManager {
 			newXp = 0;
 		}
 		setExperience(sender, player, newXp, true);
-		
+
 		if (!silent) {
 			String messageId = null;
 			HashMap<String, String> values = new HashMap<>();
@@ -347,7 +350,8 @@ public class PlayerManager {
 
 			if (!sender.getName().equalsIgnoreCase(player.getName())) {
 				values.put("Target", player.getName());
-				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_exp", values);
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_exp",
+						values);
 				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
 			}
 
@@ -400,7 +404,8 @@ public class PlayerManager {
 
 			if (!sender.getName().equalsIgnoreCase(player.getName())) {
 				values.put("Target", player.getName());
-				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_level", values);
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_give_level",
+						values);
 				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
 			}
 
@@ -423,7 +428,7 @@ public class PlayerManager {
 			newLevel = 0;
 		}
 		setLevel(sender, player, newLevel, true);
-		
+
 		if (!silent) {
 			String messageId = null;
 			HashMap<String, String> values = new HashMap<>();
@@ -431,7 +436,8 @@ public class PlayerManager {
 
 			if (!sender.getName().equalsIgnoreCase(player.getName())) {
 				values.put("Target", player.getName());
-				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_level", values);
+				String messageSender = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, "info_take_level",
+						values);
 				UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, messageSender);
 			}
 
@@ -444,5 +450,68 @@ public class PlayerManager {
 			String message = ServerToolsConfig.getCommandMessage(CmdAdminExp.CMD_LABEL, messageId, values);
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, message);
 		}
+	}
+
+	public static void setFly(CommandSender sender, Player player, boolean isAllowedFlight) {
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Sender", sender.getName());
+
+		String state = null;
+
+		if (isAllowedFlight) {
+			state = ServerToolsConfig.getCommandMessage(CmdFly.CMD_LABEL, "normal_fly_mode_state_enabled");
+		} else {
+			state = ServerToolsConfig.getCommandMessage(CmdFly.CMD_LABEL, "normal_fly_mode_state_disabled");
+		}
+		values.put("State", state);
+
+		String messageSenderId = null;
+		MessageLevel messageSenderLevel = MessageLevel.INFO;
+
+		if (player.getAllowFlight() != isAllowedFlight) {
+			if (sender != player) {
+				if (sender.hasPermission("dornacraft.essentials.fly.other")) {
+					player.setAllowFlight(isAllowedFlight);
+					values.put("Target", player.getName());
+					String messageTargetId = null;
+
+					if (sender instanceof ConsoleCommandSender) {
+						messageTargetId = "info_fly_mode_activate";
+					} else {
+						messageTargetId = "info_fly_mode_activate_by_other";
+					}
+					String messageTarget = ServerToolsConfig.getCommandMessage(CmdFly.CMD_LABEL, messageTargetId,
+							values);
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, messageTarget);
+					messageSenderId = "info_fly_mode_activate_target";
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PERMISSION_MISSING);
+				}
+			} else {
+				player.setAllowFlight(isAllowedFlight);
+				messageSenderId = "info_fly_mode_activate_by_himself";
+			}
+		} else {
+			if (sender != player) {
+				if (sender.hasPermission("dornacraft.essentials.fly.other")) {
+					messageSenderLevel = MessageLevel.FAILURE;
+					messageSenderId = "failure_fly_mode_already_in_this_state";
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, UtilsAPI.PERMISSION_MISSING);
+				}
+			} else {
+				messageSenderLevel = MessageLevel.FAILURE;
+				messageSenderId = "failure_fly_mode_already_in_this_state_himself";
+			}
+		}
+
+		if (messageSenderId != null) {
+			String messageSender = ServerToolsConfig.getCommandMessage(CmdFly.CMD_LABEL, messageSenderId, values);
+			UtilsAPI.sendSystemMessage(messageSenderLevel, sender, messageSender);
+		}
+	}
+
+	public static void toggleFly(CommandSender sender, Player player) {
+		setFly(sender, player, !player.getAllowFlight());
 	}
 }

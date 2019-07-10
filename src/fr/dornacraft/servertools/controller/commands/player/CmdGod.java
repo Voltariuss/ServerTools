@@ -29,32 +29,39 @@ public class CmdGod extends DornacraftCommand {
 
 			@Override
 			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
-				// - /god [player] [selector]
+				// - /god [player] [on/off]
+				Player player = null;
+
+				if (args.length >= 1) {
+					player = Bukkit.getPlayer(args[0]);
+				}
+
 				if (args.length == 0) {
 					if (sender instanceof Player) {
-						GodPlayerManager.toggleGodMode(sender, (Player) sender);
+						player = (Player) sender;
+						GodPlayerManager.toggleGodMode(sender, player);
 					} else {
 						throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 					}
 				} else if (args.length == 1) {
 					if (sender.hasPermission("dornacraft.essentials.god.other")) {
-						GodPlayerManager.toggleGodMode(sender, Bukkit.getPlayer(args[0]));
+						GodPlayerManager.toggleGodMode(sender, player);
 					} else {
 						throw new DornacraftCommandException(UtilsAPI.PERMISSION_MISSING);
 					}
 				} else if (args.length == 2) {
 					if (sender.hasPermission("dornacraft.essentials.god.other")) {
 						if (args[1].equalsIgnoreCase("on")) {
-							GodPlayerManager.setGod(sender, Bukkit.getPlayer(args[0]), true);
-
-						} else if (args[1].equalsIgnoreCase("off")) {
-							GodPlayerManager.setGod(sender, Bukkit.getPlayer(args[0]), false);
+							GodPlayerManager.setGod(sender, player, true);
+						} else {
+							GodPlayerManager.setGod(sender, player, false);
 						}
+					} else {
+						throw new DornacraftCommandException(UtilsAPI.PERMISSION_MISSING);
 					}
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 
 		CommandArgumentChecker checker = new CommandArgumentChecker() {

@@ -81,6 +81,16 @@ messages:
       info_feed_himself: "Vous vous êtes rassasié."
       info_feed_by_other: "Vous avez été rassasié par §b{Sender}§r."
       info_feed_player: "Vous avez rassisié le joueur §b{Target}§r."
+    fly:
+      cmd_desc: "Active/Désactive le mode fly pour le joueur ciblé"
+      normal_fly_mode_state_enabled: "§a§lactivé"
+      normal_fly_mode_state_disabled: "§c§ldésactivé"
+      info_fly_mode_activate_target: "Vous avez {State} §ele mode §6Fly §eau joueur §b{Target}§e."
+      info_fly_mode_activate: "Mode §6Fly {State}§e."
+      info_fly_mode_activate_by_other: "Mode §6Fly {State} §epar §b{Sender}§e."
+      info_fly_mode_activate_by_himself: "Vous avez {State} §evotre mode §6Fly§e."
+      failure_fly_mode_already_in_this_state: "Mode §6Fly §edéjà %s §epour §b{State}§e."
+      failure_fly_mode_already_in_this_state_himself: "Votre mode §6Fly §eest déjà {State}§e."
     gc:
       info_header: "§6+§r------------- §aETAT SERVEUR §r-------------§6+"
       info_time_server_running: "§6Durée de fonctionnement : §c{Time_Running}"

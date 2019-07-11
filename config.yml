@@ -73,6 +73,9 @@ messages:
       info_clear_enderchest_player: "Vous avez supprimé l'EnderChest du joueur §b{Target}§r."
     craft:
       info_open_workbench: "Ouverture de la table de craft..."
+    enderchest:
+      info_open_enderchest: "Ouverture de votre EnderChest..."
+      info_open_enderchest_of_other: "Ouverture de l'EnderChest du joueur §b{Target}§r..."
     exp:
       info_current_level: "Niveau d'expérience du joueur §b{Target} §r: §6{Level} §8§o(§6§o{Amount_Exp}§7§o/§6§o{Amount_Exp_To_LevelUp} xp §8§o» §6§o{Total_Amount_Exp} xp§8§o)"
       info_current_level_himself: "Votre niveau d'expérience §r: §6{Level} §8§o(§6§o{Amount_Exp}§7§o/§6§o{Amount_Exp_To_LevelUp} xp §8§o» §6§o{Total_Amount_Exp} xp§8§o)"

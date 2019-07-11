@@ -4,10 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.voltariuss.simpledevapi.MessageLevel;
+import fr.dornacraft.servertools.ServerTools;
+import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.UtilsAPI;
+import fr.voltariuss.simpledevapi.cmds.CommandArgument;
+import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
+import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
+import fr.voltariuss.simpledevapi.cmds.DornacraftCommandException;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 
 public class CmdEnderchest extends DornacraftCommand {
@@ -16,28 +22,27 @@ public class CmdEnderchest extends DornacraftCommand {
 
 	public CmdEnderchest() {
 		super(CMD_LABEL);
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
-			public void execute(CommandSender sender, Command arg1, String arg2, String[] args) throws Exception {
+			public void execute(CommandSender sender, Command cmd, String label, String[] args) throws Exception {
 				if (sender instanceof Player) {
-					if (args.length == 0 || args[0].equalsIgnoreCase(sender.getName())) {
-						((Player) sender).openInventory(((Player) sender).getEnderChest());
-					} else {
-						Player target = Bukkit.getPlayer(args[0]);
+					Player player = (Player) sender;
+					Player target = player;
 
-						if (target != null) {
-							((Player) sender).openInventory(target.getEnderChest());
-						} else {
-							UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PLAYER_UNKNOW);
-						}
+					if (args.length == 1) {
+						target = Bukkit.getPlayer(args[0]);
 					}
+					PlayerManager.openEnderChest(player, target);
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
+					throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
+		getCmdTreeExecutor()
+				.addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), cmdDesc,
+						executor, "dornacraft.essentials.enderchest.other"));
 	}
 }

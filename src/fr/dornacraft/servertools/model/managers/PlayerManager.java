@@ -30,6 +30,7 @@ import fr.dornacraft.servertools.controller.commands.player.CmdGamemode;
 import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
 import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
+import fr.dornacraft.servertools.controller.commands.utils.CmdEnderchest;
 import fr.dornacraft.servertools.controller.commands.utils.CmdExp;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.model.utils.GameModeType;
@@ -572,5 +573,27 @@ public class PlayerManager {
 	public static void setGameMode(CommandSender sender, Player player, GameMode gameMode) {
 		GameModeType gameModeType = GameModeType.getFromGameMode(gameMode);
 		setGameMode(sender, player, gameModeType);
+	}
+
+	public static void openEnderChest(Player sender, Player player) {
+		sender.openInventory(player.getEnderChest());
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Target", player.getName());
+		String messageId = null;
+
+		if (sender == player) {
+			messageId = "info_open_enderchest";
+		} else {
+			if (sender.hasPermission("dornacraft.essentials.enderchest.other")) {
+				messageId = "info_open_enderchest_of_other";
+			} else {
+				UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PERMISSION_MISSING);
+			}
+		}
+
+		if (messageId != null) {
+			String message = ServerToolsConfig.getCommandMessage(CmdEnderchest.CMD_LABEL, messageId, values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, message);
+		}
 	}
 }

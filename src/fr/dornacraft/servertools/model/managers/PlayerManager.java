@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -25,11 +26,13 @@ import fr.dornacraft.servertools.controller.commands.info.CmdSeen;
 import fr.dornacraft.servertools.controller.commands.info.CmdWhois;
 import fr.dornacraft.servertools.controller.commands.player.CmdFeed;
 import fr.dornacraft.servertools.controller.commands.player.CmdFly;
+import fr.dornacraft.servertools.controller.commands.player.CmdGamemode;
 import fr.dornacraft.servertools.controller.commands.player.CmdHeal;
 import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
 import fr.dornacraft.servertools.controller.commands.utils.CmdExp;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
+import fr.dornacraft.servertools.model.utils.GameModeType;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.ConfigManager;
@@ -513,5 +516,61 @@ public class PlayerManager {
 
 	public static void toggleFly(CommandSender sender, Player player) {
 		setFly(sender, player, !player.getAllowFlight());
+	}
+
+	public static void setGameMode(CommandSender sender, Player player, GameModeType gameModeType) {
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Sender", sender.getName());
+		values.put("Game_Mode", gameModeType.getName());
+
+		String messageSenderId = null;
+		MessageLevel messageSenderLevel = MessageLevel.INFO;
+
+		if (player.getGameMode() != gameModeType.getGameMode()) {
+			if (sender != player) {
+				if (sender.hasPermission("dornacraft.essentials.gamemode.other")) {
+					player.setGameMode(gameModeType.getGameMode());
+					values.put("Target", player.getName());
+					String messageTargetId = null;
+
+					if (sender instanceof ConsoleCommandSender) {
+						messageTargetId = "info_gamemode_defined";
+					} else {
+						messageTargetId = "info_gamemode_defined_by_other";
+					}
+					String messageTarget = ServerToolsConfig.getCommandMessage(CmdGamemode.CMD_LABEL, messageTargetId,
+							values);
+					UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, messageTarget);
+					messageSenderId = "info_gamemode_defined_target";
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PERMISSION_MISSING);
+				}
+			} else {
+				player.setGameMode(gameModeType.getGameMode());
+				messageSenderId = "info_gamemode_defined_by_himself";
+			}
+		} else {
+			if (sender != player) {
+				if (sender.hasPermission("dornacraft.essentials.gamemode.other")) {
+					messageSenderLevel = MessageLevel.FAILURE;
+					messageSenderId = "failure_gamemode_already_in_this_mode";
+				} else {
+					UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, sender, UtilsAPI.PERMISSION_MISSING);
+				}
+			} else {
+				messageSenderLevel = MessageLevel.FAILURE;
+				messageSenderId = "failure_gamemode_already_in_this_mode_himself";
+			}
+		}
+
+		if (messageSenderId != null) {
+			String messageSender = ServerToolsConfig.getCommandMessage(CmdGamemode.CMD_LABEL, messageSenderId, values);
+			UtilsAPI.sendSystemMessage(messageSenderLevel, sender, messageSender);
+		}
+	}
+
+	public static void setGameMode(CommandSender sender, Player player, GameMode gameMode) {
+		GameModeType gameModeType = GameModeType.getFromGameMode(gameMode);
+		setGameMode(sender, player, gameModeType);
 	}
 }

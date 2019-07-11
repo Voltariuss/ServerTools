@@ -62,6 +62,7 @@ public class GodPlayerManager {
     public static void setGod(CommandSender sender, Player player, Boolean isGod) {
         HashMap<String, String> values = new HashMap<>();
         values.put("Sender", sender.getName());
+        values.put("Target", player.getName());
 
         String state = null;
 
@@ -83,7 +84,6 @@ public class GodPlayerManager {
                     } else {
                         GodPlayerManager.getInstance().removeGod(player);
                     }
-                    values.put("Target", player.getName());
                     String messageTargetId = null;
 
                     if (sender instanceof ConsoleCommandSender) {

@@ -458,6 +458,7 @@ public class PlayerManager {
 	public static void setFly(CommandSender sender, Player player, boolean isAllowedFlight) {
 		HashMap<String, String> values = new HashMap<>();
 		values.put("Sender", sender.getName());
+		values.put("Target", player.getName());
 
 		String state = null;
 
@@ -475,7 +476,6 @@ public class PlayerManager {
 			if (sender != player) {
 				if (sender.hasPermission("dornacraft.essentials.fly.other")) {
 					player.setAllowFlight(isAllowedFlight);
-					values.put("Target", player.getName());
 					String messageTargetId = null;
 
 					if (sender instanceof ConsoleCommandSender) {
@@ -521,6 +521,7 @@ public class PlayerManager {
 	public static void setGameMode(CommandSender sender, Player player, GameModeType gameModeType) {
 		HashMap<String, String> values = new HashMap<>();
 		values.put("Sender", sender.getName());
+		values.put("Target", player.getName());
 		values.put("Game_Mode", gameModeType.getName());
 
 		String messageSenderId = null;
@@ -530,7 +531,6 @@ public class PlayerManager {
 			if (sender != player) {
 				if (sender.hasPermission("dornacraft.essentials.gamemode.other")) {
 					player.setGameMode(gameModeType.getGameMode());
-					values.put("Target", player.getName());
 					String messageTargetId = null;
 
 					if (sender instanceof ConsoleCommandSender) {

@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
@@ -17,10 +19,10 @@ import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 public class CmdExp extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "exp";
-	private static final String DESC_CMD = "Affiche les niveaux d'expérience du joueur ciblé";
 
 	public CmdExp() {
 		super(CMD_LABEL);
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -40,6 +42,6 @@ public class CmdExp extends DornacraftCommand {
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(new CommandNode(
-				new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), DESC_CMD, executor, null));
+				new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), cmdDesc, executor, null));
 	}
 }

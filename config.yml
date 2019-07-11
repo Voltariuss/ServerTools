@@ -28,7 +28,6 @@ messages:
   database_no_connection: "Le plugin n'est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées."
   commands:
     adminexp:
-      cmd_desc: "Modifie l'expérience du joueur ciblé"
       info_set_exp: "Le joueur §b{Target} §ra désormais §6{Amount} point(s) d'expérience§r."
       info_set_level: "Le joueur §b{Target} §ra désormais §6{Amount} niveau(x) d'expérience§r."
       info_change_exp: "Vous avez désormais §6{Amount} point(s) d'expérience§r."
@@ -50,7 +49,6 @@ messages:
     broadcast:
       normal_prefix: "§7[§4§lAnnonce§7] §f"
     clear:
-      cmd_desc: "Supprime l'inventaire spécifié du joueur ciblé"
       info_clear_all: "Votre inventaire et votre Enderchest ont été supprimés."
       info_clear_all_himself: "Vous avez supprimé votre inventaire et votre Enderchest."
       info_clear_all_by_other: "Votre inventaire et votre Enderchest ont été supprimés par §b{Sender}§r."
@@ -85,7 +83,6 @@ messages:
       info_feed_by_other: "Vous avez été rassasié par §b{Sender}§r."
       info_feed_player: "Vous avez rassisié le joueur §b{Target}§r."
     fly:
-      cmd_desc: "Active/Désactive le mode fly pour le joueur ciblé"
       normal_fly_mode_state_enabled: "§a§lactivé"
       normal_fly_mode_state_disabled: "§c§ldésactivé"
       info_fly_mode_activate_target: "Vous avez {State} le mode §6Fly §rau joueur §b{Target}§r."
@@ -95,7 +92,6 @@ messages:
       failure_fly_mode_already_in_this_state: "Mode §6Fly §rdéjà {State} pour §b{Target}§r."
       failure_fly_mode_already_in_this_state_himself: "Votre mode §6Fly §rest déjà {State}."
     gamemode:
-      cmd_desc: "Définit le gamemode pour le joueur ciblé"
       normal_gamemode_survival: "Survie"
       normal_gamemode_creative: "Créatif"
       normal_gamemode_adventure: "Aventure"
@@ -116,7 +112,6 @@ messages:
       info_world_template: "§6Monde §a{Name} §6\"§c{Type}§6\" : §c{Number_Chunks_Loaded}§6 chunks, §c{Number_Entities}§6 entités, §c{Number_Tiles}§6 tiles"
       info_footer: "§6+§r--------------------------------------§6+"
     god:
-      cmd_desc: "Active/Désactive le mode invincible pour le joueur ciblé"
       normal_god_mode_state_enabled: "§a§lactivé"
       normal_god_mode_state_disabled: "§c§ldésactivé"
       info_god_mode_activate_target: "Vous avez {State} le mode §6God §rau joueur §b{Target}§r."
@@ -157,11 +152,9 @@ messages:
       failure_slot_already_full: "Votre slot est déjà plein."
       warning_no_item_in_main_hand: "Vous n'avez pas d'item dans votre main."
     ping:
-      cmd_desc: "Vous indique la latence du joueur ciblé"
       info_ping_himself: "§6Pong ! §8» {Ping} §ems"
       info_ping_target: "Temps de réponse du joueur §b{Player} §e: {Ping} ms"
     seen:
-      cmd_desc: "Affiche les informations sur l'ip du joueur ciblé"
       normal_unknow_tag: "Inconnue"
       other_header_info_ip: "Informations sur l'IP"
       other_pseudo: "Pseudo"

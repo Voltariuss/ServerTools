@@ -5,10 +5,11 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.dornacraft.servertools.model.utils.GameModeType;
-import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
 import fr.voltariuss.simpledevapi.cmds.CommandArgumentChecker;
@@ -25,7 +26,7 @@ public class CmdGamemode extends DornacraftCommand {
 
 	public CmdGamemode() {
 		super(CMD_LABEL);
-		String cmdDesc = ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc");
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override

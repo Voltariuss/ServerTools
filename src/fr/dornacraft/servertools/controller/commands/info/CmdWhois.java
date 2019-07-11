@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -17,11 +19,10 @@ import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 public class CmdWhois extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "whois";
-	private static final String CMD_DESC = null;
 
 	public CmdWhois() {
 		super(CMD_LABEL);
-
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -47,6 +48,6 @@ public class CmdWhois extends DornacraftCommand {
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.STRING.getCustomArgType("player"), false), CMD_DESC, executor, null));
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING.getCustomArgType("player"), false), cmdDesc, executor, null));
 	}
 }

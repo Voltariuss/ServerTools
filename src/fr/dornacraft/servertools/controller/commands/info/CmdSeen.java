@@ -3,9 +3,10 @@ package fr.dornacraft.servertools.controller.commands.info;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
-import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
 import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
@@ -18,7 +19,7 @@ public class CmdSeen extends DornacraftCommand {
 
 	public CmdSeen() {
 		super(CMD_LABEL);
-
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -32,7 +33,8 @@ public class CmdSeen extends DornacraftCommand {
 				}
 			}
 		};
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.STRING.getCustomArgType("player|hostAddress"), true),
-				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc"), executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(
+				new CommandArgument(CommandArgumentType.STRING.getCustomArgType("player|hostAddress"), true), cmdDesc,
+				executor, null));
 	}
 }

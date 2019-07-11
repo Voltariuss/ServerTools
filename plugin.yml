@@ -6,67 +6,93 @@ authors: [Serafa43, bletrazerIV, SkilzBeater]
 main: ${project.groupId}.${project.name}
 
 commands:
-  spawn:
-    description: Téléportation au spawn du serveur.
-    permission: dornacraft.essentials.spawn
-  craft:
-    description: Ouverture d'une table de craft.
-    permission: dornacraft.essentials.craft
-    aliases: [workbench]
-  feed:
-    description: Régénération de la barre de nourriture.
-    permission: dornacraft.essentials.feed
-    aliases: [eat]
-  heal:
-    description: Soigne le joueur.
-    permission: dornacraft.essentials.heal
-  fly:
-    description: Active/désactive le fly mode.
-    permission: dornacraft.essentials.fly
-  gamemode:
-    description: Modifie le mode de jeu du joueur.
-    permission: dornacraft.essentials.gamemode
-    aliases: [gm]
-  god:
-    description: Active/désactive le mode invuln�rable.
-    permission: dornacraft.essentials.god
-  hat:
-    description: Place l'item dans la main du joueur sur sa t�te.
-    permission: dornacraft.essentials.hat
-  more:
-    description: Met le stock du matériel qui est dans la main du joueur au maximum.
-    permission: dornacraft.essentials.more
-  suicide:
-    description: Se suicide.
-    permission: dornacraft.essentials.suicide
+  adminexp:
+    description: Modifie l'expérience du joueur ciblé.
+    permission: dornacraft.essentials.adminexp
+    aliases: [aexp, adminxp, axp]
+  back:
+    description: Téléportation au dernier point sauvegardé.
+    permission: dornacraft.essentials.back
   broadcast:
     description: Envoie une annonce sur le serveur.
     permission: dornacraft.essentials.broadcast
     aliases: [bc]
+  clear:
+    description: Supprime l'inventaire spécifié du joueur ciblé.
+    permission: dornacraft.essentials.clear
+    aliases: [ci]
+  craft:
+    description: Ouverture d'une table de craft.
+    permission: dornacraft.essentials.craft
+    aliases: [workbench]
+  delhome:
+    description: Supprime une résidence.
+    permission: dornacraft.essentials.delhome
   enderchest:
     description: Ouverture de son Enderchest.
     permission: dornacraft.essentials.enderchest
     aliases: [ec]
+  exp:
+    description: Affiche les niveaux d'expérience du joueur ciblé.
+    permission: dornacraft.essentials.exp
+    aliases: [xp]
+  feed:
+    description: Régénération de la barre de nourriture du joueur ciblé.
+    permission: dornacraft.essentials.feed
+    aliases: [eat]
+  fly:
+    description: Active/Désactive le mode fly pour le joueur ciblé.
+    permission: dornacraft.essentials.fly
+  gamemode:
+    description: Définit le gamemode pour le joueur ciblé.
+    permission: dornacraft.essentials.gamemode
+    aliases: [gm]
   gc:
     description: Affiche les informations sur les chunks, la memoire et le monde.
     permission: dornacraft.essentials.gc
     aliases: [lag, mem, memory, tps]
-  adminexp:
-    description: Modifier l'expérience ou le niveau d'expérience d'un joueur.
-    permission: dornacraft.essentials.adminexp
-    aliases: [aexp, adminxp, axp]
-  exp:
-    description: Consulte ou modifie son propre niveau d'exp ou celui des autres.
-    permission: dornacraft.essentials.exp
-    aliases: [xp]
+  god:
+    description: Active/Désactive le mode invincible pour le joueur ciblé.
+    permission: dornacraft.essentials.god
+  hat:
+    description: Place l'item dans la main du joueur sur sa tête.
+    permission: dornacraft.essentials.hat
+  heal:
+    description: Soigne le joueur ciblé.
+    permission: dornacraft.essentials.heal
+  home:
+    description: Se téléporte vers une résidence.
+    permission: dornacraft.essentials.home
+  invsee:
+    description: Affiche l'inventaire complet du joueur cible.
+    permission: dornacraft.essentials.invsee
+  killall:
+    description: Tue les entités proches du joueur.
+    permission: dornacraft.essentials.killall
+  list:
+    description: Affiche la liste des joueurs connectés.
+    permission: dornacraft.essentials.list
+  more:
+    description: Met le stock du matériel qui est dans la main du joueur au maximum.
+    permission: dornacraft.essentials.more
   repair:
-    description: R�pare l'item dans la main ou tous les items de l'inventaire.
+    description: Répare l'item dans la main ou tous les items de l'inventaire.
     permission: dornacraft.essentials.repair
     aliases: [fix]
+  spawn:
+    description: Téléportation au spawn du serveur.
+    permission: dornacraft.essentials.spawn
+  suicide:
+    description: Se suicide.
+    permission: dornacraft.essentials.suicide
   msg:
     description: Envoie un message au joueur designé.
     permission: dornacraft.essentials.msg
     aliases: [tell, m, t, whisper, w]
+  ping:
+    description: Vous indique la latence du joueur ciblé.
+    permission: dornacraft.essentials.ping
+    aliases: [ms]
   reply:
     description: Répond au dernier joueur à avoir envoyé un message.
     permission: dornacraft.essentials.reply
@@ -74,30 +100,19 @@ commands:
   seen:
     description: Affiche les informations de dernière connexion du joueur ou de l'ip.
     permission: dornacraft.essentials.seen
+  sethome:
+    description: Définit une résidence.
+    permission: dornacraft.essentials.sethome
+  slime:
+    description: Affiche les chunks à slime aux alentours.
+    permission: dornacraft.essentials.slime
   spawner:
     description: Change le type de mobs que fait apparaître le spawner dans la main.
     permission: dornacraft.essentials.spawner
-  whois:
-    description: Donne les informations du joueur passées en paramètre.
-    permission: dornacraft.essentials.whois
-  clear:
-    description: Nettoie l'inventaire du joueur (ou son enderchest).
-    permission: dornacraft.essentials.clear
-    aliases: [ci]
-  ping:
-    description: Renvoie le ping d'un joueur (en ms).
-    permission: dornacraft.essentials.ping
-    aliases: [ms]
-  invsee:
-    description: Affiche l'inventaire complet du joueur cible.
-    permission: dornacraft.essentials.invsee
   tpa:
     description: Envoie une requête de téléportation vers le joueur ciblé à ce dernier.
     permission: dornacraft.essentials.tpa
     aliases: [tpask]
-  tpahere:
-    description: Envoie une requête de téléportation vers soit au joueur ciblé.
-    permission: dornacraft.essentials.tpahere
   tpaall:
     description: Envoie une requête de téléportation vers soit à tous les joueurs connectés sur le serveur.
     permission: dornacraft.essentials.tpaall
@@ -109,46 +124,31 @@ commands:
     description: Rejette la requête de téléportation.
     permission: dornacraft.essentials.tpdeny
     aliases: [tpno]
-  back:
-    description: Téléportation au dernier point sauvegardé.
-    permission: dornacraft.essentials.back
-  delhome:
-    description: Supprime une résidence.
-    permission: dornacraft.essentials.delhome
-  home:
-    description: Se téléporte vers une résidence.
-    permission: dornacraft.essentials.home
-  killall:
-    description: Tue les entités proches du joueur.
-    permission: dornacraft.essentials.killall
-  sethome:
-    description: Définit une résidence.
-    permission: dornacraft.essentials.sethome
-  list:
-    description: Affiche la liste des joueurs connectés.
-    permission: dornacraft.essentials.list
-  slime:
-    description: Affiche les chunks à slime aux alentours.
-    permission: dornacraft.essentials.slime
+  tpahere:
+    description: Envoie une requête de téléportation vers soit au joueur ciblé.
+    permission: dornacraft.essentials.tpahere
+  whois:
+    description: Fournit les informations du joueur ciblé.
+    permission: dornacraft.essentials.whois
     
 permissions:
   dornacraft.essentials.player:
     description: Donne l'accès à toutes les commandes du joueur
     default: true
     children:
+      dornacraft.essentials.back: true
+      dornacraft.essentials.delhome: true
+      dornacraft.essentials.home: true
       dornacraft.essentials.msg: true
-      dornacraft.essentials.reply: true
       dornacraft.essentials.ping: true
+      dornacraft.essentials.reply: true
+      dornacraft.essentials.sethome: true
       dornacraft.essentials.spawn: true
       dornacraft.essentials.suicide: true
       dornacraft.essentials.tpa: true
       dornacraft.essentials.tpaccept: true
-      dornacraft.essentials.tpahere: true
       dornacraft.essentials.tpdeny: true
-      dornacraft.essentials.home: true
-      dornacraft.essentials.delhome: true
-      dornacraft.essentials.sethome: true
-      dornacraft.essentials.back: true
+      dornacraft.essentials.tpahere: true
   dornacraft.essentials.moderator:
     description: Donne l'accès à toutes les commandes du modérateur
     default: false

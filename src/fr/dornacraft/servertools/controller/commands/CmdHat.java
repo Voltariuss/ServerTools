@@ -5,7 +5,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -22,6 +24,7 @@ public class CmdHat extends DornacraftCommand {
 
 	public CmdHat() {
 		super(CMD_LABEL);
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
@@ -45,12 +48,12 @@ public class CmdHat extends DornacraftCommand {
 					} else if (args[0].equalsIgnoreCase("remove")) {
 						try {
 							ItemStack helmet = player.getInventory().getHelmet();
-							
+
 							if (helmet != null) {
 								ItemHandling.addItem(player, player.getInventory().getHelmet());
 								player.getInventory().setHelmet(new ItemStack(Material.AIR));
 								UtilsAPI.sendSystemMessage(MessageLevel.INFO, player,
-										ServerToolsConfig.getCommandMessage(CMD_LABEL, "info_remove_done"));								
+										ServerToolsConfig.getCommandMessage(CMD_LABEL, "info_remove_done"));
 							} else {
 								UtilsAPI.sendSystemMessage(MessageLevel.WARNING, player,
 										ServerToolsConfig.getCommandMessage(CMD_LABEL, "warning_remove_no_helmet"));
@@ -65,7 +68,6 @@ public class CmdHat extends DornacraftCommand {
 			}
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument("remove", ""),
-				ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_arg_remove_desc"), executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument("remove"), cmdDesc, executor, null));
 	}
 }

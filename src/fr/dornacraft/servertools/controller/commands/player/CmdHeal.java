@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -18,11 +20,10 @@ import fr.voltariuss.simpledevapi.cmds.InvalidArgumentsCommandException;
 public class CmdHeal extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "heal";
-	private static final String DESC_ARG_PLAYER = "Le joueur à cibler.";
 
 	public CmdHeal() {
 		super(CMD_LABEL);
-
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -39,8 +40,8 @@ public class CmdHeal extends DornacraftCommand {
 					}
 				} else if (sender instanceof Player) {
 					target = (Player) sender;
-				} 
-				
+				}
+
 				if (sender instanceof Player || args.length == 1) {
 					PlayerManager.heal(healer, target, false);
 				} else {
@@ -49,7 +50,8 @@ public class CmdHeal extends DornacraftCommand {
 			}
 		};
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false),
-				DESC_ARG_PLAYER, executor, "dornacraft.essentials.heal.other"));
+		getCmdTreeExecutor()
+				.addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false),
+						cmdDesc, executor, "dornacraft.essentials.heal.other"));
 	}
 }

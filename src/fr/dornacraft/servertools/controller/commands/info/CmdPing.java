@@ -6,7 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
@@ -20,10 +22,10 @@ import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 public class CmdPing extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "ping";
-	private static final String CMD_DESC = ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc");
 
 	public CmdPing() {
 		super(CMD_LABEL);
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = (new DornacraftCommandExecutor() {
 
 			@Override
@@ -62,6 +64,6 @@ public class CmdPing extends DornacraftCommand {
 		});
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 		getCmdTreeExecutor().addSubCommand(
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), CMD_DESC, executor, null));
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), cmdDesc, executor, null));
 	}
 }

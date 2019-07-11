@@ -4,9 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
-import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
 import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
@@ -30,14 +31,12 @@ public class CmdAdminExp extends DornacraftCommand {
 	public static final String ARG_GIVE = "give";
 	public static final String ARG_TAKE = "take";
 
-	private static final String DESC_CMD = ServerToolsConfig.getCommandMessage(CMD_LABEL, "cmd_desc");
-
 	/**
 	 * Constructeur de la commande /adminexp
 	 */
 	public CmdAdminExp() {
 		super(CMD_LABEL);
-
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -77,17 +76,17 @@ public class CmdAdminExp extends DornacraftCommand {
 			}
 		};
 		// /adminexp set <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_SET), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_SET), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), cmdDesc, executor, null));
 		// /adminexp give <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_GIVE), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_GIVE), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), cmdDesc, executor, null));
 		// /adminexp take <player> <number>
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_TAKE), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), DESC_CMD),
-				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), DESC_CMD, executor, null));
+		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(ARG_TAKE), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), cmdDesc),
+				new CommandNode(new CommandArgument(CommandArgumentType.STRING, true), cmdDesc, executor, null));
 	}
 
 }

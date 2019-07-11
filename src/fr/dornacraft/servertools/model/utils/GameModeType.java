@@ -17,6 +17,7 @@ public enum GameModeType {
     private String name;
 
     private GameModeType(GameMode gameMode, int index, String nameId) {
+        setGameMode(gameMode);
         setIndex(index);
         setName(ServerToolsConfig.getCommandMessage(CmdGamemode.CMD_LABEL, nameId));
     }

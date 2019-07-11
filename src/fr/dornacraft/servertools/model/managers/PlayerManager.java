@@ -466,7 +466,7 @@ public class PlayerManager {
 		} else {
 			state = ServerToolsConfig.getCommandMessage(CmdFly.CMD_LABEL, "normal_fly_mode_state_disabled");
 		}
-		values.put("State", state);
+		values.put("State", state + ChatColor.RESET.toString());
 
 		String messageSenderId = null;
 		MessageLevel messageSenderLevel = MessageLevel.INFO;

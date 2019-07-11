@@ -3,6 +3,7 @@ package fr.dornacraft.servertools.model.managers;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -69,7 +70,7 @@ public class GodPlayerManager {
         } else {
             state = ServerToolsConfig.getCommandMessage(CmdGod.CMD_LABEL, "normal_god_mode_state_disabled");
         }
-        values.put("State", state);
+        values.put("State", state + ChatColor.RESET.toString());
 
         String messageSenderId = null;
         MessageLevel messageSenderLevel = MessageLevel.INFO;

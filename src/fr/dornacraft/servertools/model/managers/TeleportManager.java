@@ -10,9 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.ServerTools;
+import fr.dornacraft.servertools.controller.commands.teleport.CmdTpa;
+import fr.dornacraft.servertools.controller.commands.teleport.CmdTpaccept;
+import fr.dornacraft.servertools.controller.commands.teleport.CmdTpdeny;
 import fr.dornacraft.servertools.controller.listeners.PlayerMoveListener;
 import fr.dornacraft.servertools.model.utils.TPRequest;
 import fr.dornacraft.servertools.model.utils.TypeRequest;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -26,7 +30,7 @@ import fr.voltariuss.simpledevapi.UtilsAPI;
  */
 public class TeleportManager {
 
-	public static final String NO_REQUEST = "Vous n'avez aucune requête en attente de réponse.";
+	public static final String NO_REQUEST = ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, "failure_no_request");
 
 	private static final HashMap<Player, TPRequest> requests = new HashMap<>();
 
@@ -91,7 +95,11 @@ public class TeleportManager {
 		boolean isSeparatedSender = sender != null && !player.getName().equals(sender.getName());
 
 		if (!player.hasPermission(PERMISSION_TELEPORT_INSTANT)) {
-			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, "Téléportation dans §65 secondes§r...");
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Delay", Integer
+					.toString(JavaPlugin.getPlugin(ServerTools.class).getConfig().getInt("delay_teleportation")));
+			String messageTeleportDelay = ServerToolsConfig.getString("messages.info_teleport_begin", values);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, messageTeleportDelay);
 
 			if (PlayerMoveListener.isInTeleportation(player)) {
 				PlayerMoveListener.getTask(player).cancel();
@@ -118,31 +126,41 @@ public class TeleportManager {
 								}
 
 								if (location.getY() <= 0) {
-									UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, player,
-											"Téléportation annulée : zone de destination non-sécurisée.");
+									String messageTeleportCancel = ServerToolsConfig
+											.getString("messages.failure_teleport_cancel");
+									UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, player, messageTeleportCancel);
 
 									if (isSeparatedSender) {
+										HashMap<String, String> valuesCancel = new HashMap<>();
+										valuesCancel.put("Target", player.getName());
+										String messageTeleportPlayerCancel = ServerToolsConfig
+												.getString("messages.failure_teleport_player_cancel", valuesCancel);
 										UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender,
-												"Téléportation impossible du joueur §b%s§r.", player.getName());
+												messageTeleportPlayerCancel);
 									}
 									return;
 								}
 							}
 							player.teleport(location);
 							if (isSeparatedSender) {
-								UtilsAPI.sendSystemMessage(MessageLevel.SUCCESS, sender,
-										"Le joueur §b%s §ra bien été téléporté.", player.getName());
+								HashMap<String, String> valuesSuccess = new HashMap<>();
+								valuesSuccess.put("Target", player.getName());
+								String messageSuccessTeleportPlayer = ServerToolsConfig
+										.getString("messages.success_teleport_player", valuesSuccess);
+								UtilsAPI.sendSystemMessage(MessageLevel.SUCCESS, sender, messageSuccessTeleportPlayer);
 							}
 						}
-
 					}, 100));
 		} else {
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, teleportSuccessMessage);
 			player.teleport(location);
 
 			if (isSeparatedSender) {
-				UtilsAPI.sendSystemMessage(MessageLevel.SUCCESS, sender, "Le joueur §b%s §ra bien été téléporté.",
-						player.getName());
+				HashMap<String, String> valuesSuccess = new HashMap<>();
+				valuesSuccess.put("Target", player.getName());
+				String messageSuccessTeleportPlayer = ServerToolsConfig.getString("messages.success_teleport_player",
+						valuesSuccess);
+				UtilsAPI.sendSystemMessage(MessageLevel.SUCCESS, sender, messageSuccessTeleportPlayer);
 			}
 		}
 	}
@@ -156,26 +174,40 @@ public class TeleportManager {
 	 */
 	public static void sendRequest(Player transmitter, Player receiver, TypeRequest typeRequest) {
 		addRequest(receiver, new TPRequest(transmitter, receiver, typeRequest));
+		HashMap<String, String> values = new HashMap<>();
+		values.put("Target", receiver.getName());
+		String messageRequestPlayerId = null;
 
 		if (typeRequest != TypeRequest.ALL_TELEPORT_TO_TRANSMITTER) {
-			UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, "Requête de téléportation envoyée à §b%s§r.",
-					receiver.getName());
+			messageRequestPlayerId = "info_request_send_to_player";
 		} else {
-			UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, "Requête de téléportation générale envoyée.");
+			messageRequestPlayerId = "info_request_send_to_global";
 		}
-		receiver.sendMessage(Utils.getHeader("Requête de téléportation"));
-		receiver.sendMessage(Utils.getNewLine("Émetteur", transmitter.getName()));
+		String messageRequestPlayer = ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, messageRequestPlayerId,
+				values);
+		UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, messageRequestPlayer);
+
+		String requestHeader = Utils
+				.getHeader(ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, "normal_request_header"));
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, receiver, requestHeader);
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, receiver,
+				Utils.getNewLine(
+						ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, "normal_request_transmitter_prefix"),
+						transmitter.getName()));
+		String messageDescriptionId = null;
 
 		if (typeRequest == TypeRequest.TRANSMITTER_TELEPORT_TO_RECEIVER) {
-			receiver.sendMessage(
-					Utils.getNewLine("Description", "Le joueur souhaite §c§ose téléporter vers vous"));
+			messageDescriptionId = "normal_request_transmitter_to_receiver_description";
 		} else {
-			receiver.sendMessage(
-					Utils.getNewLine("Description", "Le joueur demande §c§oà vous téléporter vers lui"));
+			messageDescriptionId = "normal_request_receiver_to_transmitter_description";
 		}
-		receiver.sendMessage("§7Pour accepter la demande, §a/tpaccept§7, sinon §c/tpdeny§7.");
-		receiver.sendMessage("§7Cette demande de téléportation expirera dans 60 secondes.");
-		receiver.sendMessage("§4§lAttention : §cLe Tp-kill est autorisé.\n");
+		String messageDescription = ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, messageDescriptionId);
+		String descriptionPrefix = ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL,
+				"normal_request_descripion_prefix");
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, receiver,
+				Utils.getNewLine(descriptionPrefix, messageDescription));
+		UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, receiver,
+				ServerToolsConfig.getCommandMessage(CmdTpa.CMD_LABEL, "normal_request_description"));
 	}
 
 	/**
@@ -189,16 +221,21 @@ public class TeleportManager {
 			Player transmitter = request.getTransmitter();
 			request.getTimeout().cancel();
 			removeRequest(receiver);
-			UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, "Le joueur §b%s §ra §aaccepté §evotre requête.",
-					receiver.getName());
+
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Receiver", receiver.getName());
+			values.put("Transmitter", transmitter.getName());
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, transmitter, ServerToolsConfig
+					.getCommandMessage(CmdTpaccept.CMD_LABEL, "info_request_accepted_by_receiver", values));
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, receiver,
-					"Vous avez §aaccepté §rla requête du joueur §b%s§r.", transmitter.getName());
+					ServerToolsConfig.getCommandMessage(CmdTpaccept.CMD_LABEL, "info_request_accepted", values));
 			request.getLocation().setPitch(0);
+			String messageTeleportStart = ServerToolsConfig.getString("messages.info_teleport_start");
 
 			if (request.getTypeRequest() == TypeRequest.TRANSMITTER_TELEPORT_TO_RECEIVER) {
-				teleportPlayerTo(null, transmitter, request.getLocation(), "Début de la téléportation...");
+				teleportPlayerTo(null, transmitter, request.getLocation(), messageTeleportStart);
 			} else {
-				teleportPlayerTo(null, receiver, request.getLocation(), "Début de la téléportation...");
+				teleportPlayerTo(null, receiver, request.getLocation(), messageTeleportStart);
 			}
 		} else {
 			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, receiver, NO_REQUEST);
@@ -215,10 +252,14 @@ public class TeleportManager {
 			TPRequest request = getTPRequest(receiver);
 			request.getTimeout().cancel();
 			removeRequest(receiver);
-			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, request.getTransmitter(),
-					"Le joueur §b%s §ra §crefusé §rvotre requête.", receiver.getName());
-			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, receiver, "Vous avez refusé la requête du joueur §b%s§r.",
-					request.getTransmitter().getName());
+
+			HashMap<String, String> values = new HashMap<>();
+			values.put("Receiver", receiver.getName());
+			values.put("Transmitter", request.getTransmitter().getName());
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, request.getTransmitter(), ServerToolsConfig
+					.getCommandMessage(CmdTpdeny.CMD_LABEL, "info_request_refused_by_receiver", values));
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, receiver,
+					ServerToolsConfig.getCommandMessage(CmdTpdeny.CMD_LABEL, "info_request_refused", values));
 		} else {
 			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, receiver, NO_REQUEST);
 		}

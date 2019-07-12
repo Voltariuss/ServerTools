@@ -5,9 +5,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.dornacraft.servertools.model.managers.TeleportManager;
-import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
+import fr.voltariuss.simpledevapi.cmds.DornacraftCommandException;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 
 public class CmdTpdeny extends DornacraftCommand {
@@ -23,7 +23,7 @@ public class CmdTpdeny extends DornacraftCommand {
 				if (sender instanceof Player) {
 					TeleportManager.denyRequest((Player) sender);
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
+					throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};

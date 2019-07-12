@@ -110,7 +110,7 @@ commands:
     description: Change le type de mobs que fait apparaître le spawner dans la main.
     permission: dornacraft.essentials.spawner
   tpa:
-    description: Envoie une requête de téléportation vers le joueur ciblé à ce dernier.
+    description: Envoie une requête de téléportation au joueur ciblé.
     permission: dornacraft.essentials.tpa
     aliases: [tpask]
   tpaall:

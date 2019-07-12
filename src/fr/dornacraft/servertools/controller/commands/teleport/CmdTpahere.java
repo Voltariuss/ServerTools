@@ -4,24 +4,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.TeleportManager;
 import fr.dornacraft.servertools.model.utils.TypeRequest;
-import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;
 import fr.voltariuss.simpledevapi.cmds.CommandArgumentType;
 import fr.voltariuss.simpledevapi.cmds.CommandNode;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
+import fr.voltariuss.simpledevapi.cmds.DornacraftCommandException;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 
 public class CmdTpahere extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "tpahere";
-	private static final String DESC_ARG_PLAYER = "Téléporte le joueur cible à vous.";
 
 	public CmdTpahere() {
 		super(CMD_LABEL);
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -34,18 +36,18 @@ public class CmdTpahere extends DornacraftCommand {
 							TeleportManager.sendRequest((Player) sender, receiver,
 									TypeRequest.RECEIVER_TELEPORT_TO_TRANSMITTER);
 						} else {
-							UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PLAYER_UNKNOW);
+							throw new DornacraftCommandException(UtilsAPI.PLAYER_NOT_FOUND);
 						}
 					} else {
-						UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.PLAYER_NOT_YOURSELF);
+						throw new DornacraftCommandException(UtilsAPI.PLAYER_NOT_YOURSELF);
 					}
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
+					throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};
 
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true),
-				DESC_ARG_PLAYER, executor, null));
+		getCmdTreeExecutor().addSubCommand(
+				new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, true), cmdDesc, executor, null));
 	}
 }

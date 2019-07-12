@@ -12,7 +12,11 @@ public class ServerToolsConfig {
 	public static String getString(String path) {
 		return JavaPlugin.getPlugin(ServerTools.class).getConfig().getString(path);
 	}
-	
+
+	public static String getString(String path, HashMap<String, String> values) {
+		return StrSubstitutor.replace(getString(path), values, "{", "}");
+	}
+	 
 	public static String getCommandMessage(String cmdLabel, String subPath) {
 		return getString("messages.commands." + cmdLabel + '.' + subPath);
 	}

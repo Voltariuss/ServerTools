@@ -1,6 +1,7 @@
 ## File configuration for the plugin ServerTools ##
 
 # Spawn management
+#
 spawn_location:
   x: 0.0
   y: 65.0
@@ -11,8 +12,14 @@ spawn_location:
 respawn_to_spawn_location: true
 
 # PlayerList management
+#
 player_list:
   number_player_per_page: 25
+
+# Teleportation management
+#
+# Delay before teleportation (in seconds)
+delay_teleportation: 5
 
 # Informations about color management :
 #
@@ -30,6 +37,11 @@ player_list:
 # Example: Info message => "This message is yellow, §cRed now, §rYellow again"
 messages:
   database_no_connection: "Le plugin n'est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées."
+  info_teleport_begin: "Téléportation dans §6{Delay} secondes§r..."
+  info_teleport_start: "Début de la téléportation..."
+  success_teleport_player: "Le joueur §b{Target} §ra bien été téléporté."
+  failure_teleport_cancel: "Téléportation annulée : zone de destination non-sécurisée."
+  failure_teleport_player_cancel: "Téléportation impossible du joueur §b{Target}§r."
   commands:
     adminexp:
       info_set_exp: "Le joueur §b{Target} §ra désormais §6{Amount} point(s) d'expérience§r."
@@ -193,6 +205,25 @@ messages:
       error_invalid_input_or_unkown_target: "Saisie incorrecte ou joueur/ip inconnu(e)."
     suicide:
       failure_message: "Vous vous êtes suicidé..."
+    tpa:
+      normal_request_header: "Requête de téléportation"
+      normal_request_transmitter_prefix: "Émetteur"
+      normal_request_descripion_prefix: "Description"
+      normal_request_transmitter_to_receiver_description: "Le joueur souhaite §c§ose téléporter vers vous"
+      normal_request_receiver_to_transmitter_description: "Le joueur demande §c§oà vous téléporter vers lui"
+      normal_request_description: |
+        §7Pour accepter la demande, §a/tpaccept§7, sinon §c/tpdeny§7.
+        §7Cette demande de téléportation expirera dans 60 secondes.
+        §4§lAttention : §cLe Tp-kill est autorisé.
+      info_request_send_to_player: "Requête de téléportation envoyée à §b{Target}§r."
+      info_request_send_to_global: "Requête de téléportation générale envoyée."
+      failure_no_request: "Vous n'avez aucune requête en attente de réponse."
+    tpaccept:
+      info_request_accepted_by_receiver: "Le joueur §b{Receiver} §ra §aaccepté §rvotre requête."
+      info_request_accepted: "Vous avez §aaccepté §rla requête du joueur §b{Transmitter}§r."
+    tpdeny:
+      info_request_refused_by_receiver: "Le joueur §b{Receiver} §ra §crefusé §rvotre requête."
+      info_request_refused: "Vous avez §crefusé §rla requête du joueur §b{Transmitter}§r."
     whois:
       other_header_info_player: "Informations du joueur"
       other_pseudo: "Pseudo"

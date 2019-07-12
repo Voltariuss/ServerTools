@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 
 import fr.dornacraft.servertools.model.managers.TeleportManager;
 import fr.dornacraft.servertools.model.utils.TypeRequest;
-import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommand;
+import fr.voltariuss.simpledevapi.cmds.DornacraftCommandException;
 import fr.voltariuss.simpledevapi.cmds.DornacraftCommandExecutor;
 
 public class CmdTpaall extends DornacraftCommand {
@@ -30,11 +30,10 @@ public class CmdTpaall extends DornacraftCommand {
 						}
 					}
 				} else {
-					UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.CONSOLE_NOT_ALLOWED);
+					throw new DornacraftCommandException(UtilsAPI.CONSOLE_NOT_ALLOWED);
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
 	}
 }

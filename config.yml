@@ -163,6 +163,16 @@ messages:
     ping:
       info_ping_himself: "§6Pong ! §8» {Ping} §ems"
       info_ping_target: "Temps de réponse du joueur §b{Player} §e: {Ping} ms"
+    repair:
+      success_repair_item: "Item réparé !"
+      success_repair_item_in_main_hand: "L'item dans votre main principale a été réparé !"
+      success_repair_all_items: "Tous les items de votre inventaire ont été réparés !"
+      info_item_undamaged: "L'item est intact."
+      info_item_in_main_hand_undamaged: "L'item dans votre main principale est intact."
+      info_no_item_to_repair: "Aucun item à réparer."
+      failure_item_not_repairable: "L'item n'est pas réparable."
+      failure_item_in_main_hand_not_repairable: "L'item dans votre main n'est pas réparable."
+      warning_no_item_in_main_hand: "Vous n'avez aucun item dans votre main principale."
     seen:
       normal_unknow_tag: "Inconnue"
       other_header_info_ip: "Informations sur l'IP"

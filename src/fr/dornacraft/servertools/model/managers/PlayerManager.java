@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -13,12 +15,14 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import fr.dornacraft.servertools.ServerTools;
@@ -32,6 +36,7 @@ import fr.dornacraft.servertools.controller.commands.utils.CmdAdminExp;
 import fr.dornacraft.servertools.controller.commands.utils.CmdClear;
 import fr.dornacraft.servertools.controller.commands.utils.CmdEnderchest;
 import fr.dornacraft.servertools.controller.commands.utils.CmdExp;
+import fr.dornacraft.servertools.controller.commands.utils.CmdRepair;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
 import fr.dornacraft.servertools.model.utils.GameModeType;
 import fr.dornacraft.servertools.utils.ServerToolsConfig;
@@ -39,6 +44,7 @@ import fr.dornacraft.servertools.utils.Utils;
 import fr.voltariuss.simpledevapi.ConfigManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
+import fr.voltariuss.simpledevapi.items.ItemUtils;
 
 public class PlayerManager {
 
@@ -312,7 +318,6 @@ public class PlayerManager {
 	}
 
 	public static void giveExperience(CommandSender sender, Player player, int amount, boolean silent) {
-		System.out.println(ExperienceManager.getTotalExperience(15));
 		int newXp = ExperienceManager.getTotalExperience(player) + amount;
 		setExperience(sender, player, newXp, true);
 
@@ -594,6 +599,86 @@ public class PlayerManager {
 		if (messageId != null) {
 			String message = ServerToolsConfig.getCommandMessage(CmdEnderchest.CMD_LABEL, messageId, values);
 			UtilsAPI.sendSystemMessage(MessageLevel.INFO, sender, message);
+		}
+	}
+
+	private static boolean repairItem(Player player, ItemStack itemStack, boolean isSilent, boolean isItemInMainHand) {
+		boolean isRepair = false;
+		String messageId = null;
+		MessageLevel messageLevel = null;
+
+		if (ItemUtils.isRepairable(itemStack)) {
+			if (itemStack.getDurability() != 0) {
+				itemStack.setDurability((short) 0);
+				isRepair = true;
+				messageId = "success_repair_item";
+				messageLevel = MessageLevel.SUCCESS;
+			} else {
+				messageId = "info_item_undamaged";
+				messageLevel = MessageLevel.INFO;
+			}
+		} else {
+			messageId = "failure_item_not_repairable";
+			messageLevel = MessageLevel.FAILURE;
+		}
+
+		if (!isSilent) {
+			if (isItemInMainHand) {
+				messageId = messageId.replace("item", "item_in_main_hand");
+			}
+			String message = ServerToolsConfig.getCommandMessage(CmdRepair.CMD_LABEL, messageId);
+			UtilsAPI.sendSystemMessage(messageLevel, player, message);
+
+			if (isRepair) {
+				player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+			}
+		}
+		return isRepair;
+	}
+
+	public static void repairItem(Player player, ItemStack itemStack) {
+		repairItem(player, itemStack, false, false);
+	}
+
+	public static void repairItemInHand(Player player) {
+		ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
+
+		if (itemInMainHand != null && itemInMainHand.getType() != Material.AIR) {
+			repairItem(player, itemInMainHand, false, true);
+		} else {
+			String message = ServerToolsConfig.getCommandMessage(CmdRepair.CMD_LABEL, "warning_no_item_in_main_hand");
+			UtilsAPI.sendSystemMessage(MessageLevel.WARNING, player, message);
+		}
+	}
+
+	public static void repairAllItems(Player player) {
+		boolean hasRepairItems = false;
+		List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
+		items.add(player.getInventory().getHelmet());
+		items.add(player.getInventory().getChestplate());
+		items.add(player.getInventory().getLeggings());
+		items.add(player.getInventory().getBoots());
+
+		for (ItemStack item : items) {
+			if (item != null && item.getType() != Material.AIR) {
+				hasRepairItems = repairItem(player, item, true, false) || hasRepairItems;
+			}
+		}
+		String messageId = null;
+		MessageLevel messageLevel = null;
+
+		if (hasRepairItems) {
+			messageId = "success_repair_all_items";
+			messageLevel = MessageLevel.SUCCESS;
+		} else {
+			messageId = "info_no_item_to_repair";
+			messageLevel = MessageLevel.INFO;
+		}
+		String message = ServerToolsConfig.getCommandMessage(CmdRepair.CMD_LABEL, messageId);
+		UtilsAPI.sendSystemMessage(messageLevel, player, message);
+
+		if (hasRepairItems) {
+			player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 		}
 	}
 }

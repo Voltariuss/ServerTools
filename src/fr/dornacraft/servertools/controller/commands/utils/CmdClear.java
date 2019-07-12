@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PlayerManager;
-import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.cmds.CommandArgument;

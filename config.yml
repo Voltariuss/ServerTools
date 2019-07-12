@@ -10,6 +10,10 @@ spawn_location:
   world: "world"
 respawn_to_spawn_location: true
 
+# PlayerList management
+player_list:
+  number_player_per_page: 25
+
 # Informations about color management :
 #
 # Each message prefix has a specific prefix that indicate the default color and prefix of the message :
@@ -148,6 +152,11 @@ messages:
       info_kill_all_in_world_with_radius: "Vous avez supprimé §6{Number_Entities} {Entity_Type_Name} §rdans le monde §a{World} §rdans un rayon de §6{Radius} blocs§r."
       error_invalid_world: "Le monde spécifié n'existe pas."
       error_invalid_entity_type: "Le type d'entité spécifié est incorrect."
+    list:
+      normal_player_list_header: "§e===== §6[§c{Number_Online_Player} §ajoueur(s) en ligne{Page}§6] §e====="
+      normal_player_list_header_page: " §7(page {Current_Page_Number}/{Total_Number_Page})"
+      info_player_list_next_page: "Faites §6/list {Page} §rpour voir la page suivante."
+      warning_no_player_online: "Il n'y a aucun joueur de connecté sur le serveur."
     more:
       failure_slot_already_full: "Votre slot est déjà plein."
       warning_no_item_in_main_hand: "Vous n'avez pas d'item dans votre main."

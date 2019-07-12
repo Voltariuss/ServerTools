@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.GlobalManager;
 import fr.dornacraft.servertools.model.managers.TeleportManager;
 import fr.dornacraft.servertools.utils.Utils;
@@ -20,11 +22,9 @@ public final class CmdSpawn extends DornacraftCommand {
 
 	public static final String CMD_LABEL = "spawn";
 
-	private static final String DESC_ARG_PLAYER = "Le joueur à téléporter au spawn.";
-
 	public CmdSpawn() {
 		super(CMD_LABEL);
-
+		String cmdDesc = JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getDescription();
 		DornacraftCommandExecutor executor = new DornacraftCommandExecutor() {
 
 			@Override
@@ -48,10 +48,10 @@ public final class CmdSpawn extends DornacraftCommand {
 				}
 			}
 		};
-
 		getCmdTreeExecutor().getRoot().setExecutor(executor);
-		getCmdTreeExecutor().addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false),
-				DESC_ARG_PLAYER, executor, TeleportManager.PERMISSION_TELEPORT_OTHERS));
+		getCmdTreeExecutor()
+				.addSubCommand(new CommandNode(new CommandArgument(CommandArgumentType.ONLINE_PLAYER, false), cmdDesc,
+						executor, TeleportManager.PERMISSION_TELEPORT_OTHERS));
 
 	}
 }

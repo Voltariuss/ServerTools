@@ -94,7 +94,7 @@ public class TeleportManager {
 			String teleportSuccessMessage) {
 		boolean isSeparatedSender = sender != null && !player.getName().equals(sender.getName());
 
-		if (!player.hasPermission(PERMISSION_TELEPORT_INSTANT)) {
+		if (!player.hasPermission(PERMISSION_TELEPORT_INSTANT) && !isSeparatedSender) {
 			HashMap<String, String> values = new HashMap<>();
 			values.put("Delay", Integer
 					.toString(JavaPlugin.getPlugin(ServerTools.class).getConfig().getInt("delay_teleportation")));
@@ -152,7 +152,7 @@ public class TeleportManager {
 						}
 					}, 100));
 		} else {
-			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, teleportSuccessMessage);
+			UtilsAPI.sendSystemMessage(MessageLevel.INFO, player, teleportSuccessMessage);			
 			player.teleport(location);
 
 			if (isSeparatedSender) {

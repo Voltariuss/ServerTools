@@ -1,9 +1,13 @@
 package fr.dornacraft.servertools.controller.commands.utils;
 
+import java.util.StringJoiner;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.managers.PrivateMessageManager;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
@@ -15,14 +19,15 @@ public class CmdReply implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// - /reply <message>
-		if (sender.hasPermission("dornacraft.essentials.reply")) {
+		if (sender.hasPermission(JavaPlugin.getPlugin(ServerTools.class).getCommand(CMD_LABEL).getPermission())) {
 			if (args.length >= 1) {
-				StringBuilder sb = new StringBuilder();
+				StringJoiner messageJoiner = new StringJoiner(" ");
 
 				for (int i = 0; i < args.length; i++) {
-					sb.append(args[i] + " ");
+					messageJoiner.add(args[i]);
 				}
-				PrivateMessageManager.reply(sender, sb.toString());
+				String message = messageJoiner.toString();
+				PrivateMessageManager.reply(sender, message);
 			} else {
 				UtilsAPI.sendSystemMessage(MessageLevel.ERROR, sender, UtilsAPI.COMMAND_NOT_ENOUGH_ARGUMENTS);
 			}

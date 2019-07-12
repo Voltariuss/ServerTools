@@ -7,6 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import fr.dornacraft.servertools.controller.commands.utils.CmdMsg;
+import fr.dornacraft.servertools.controller.commands.utils.CmdReply;
+import fr.dornacraft.servertools.utils.ServerToolsConfig;
 import fr.voltariuss.simpledevapi.MessageLevel;
 import fr.voltariuss.simpledevapi.UtilsAPI;
 
@@ -37,14 +40,21 @@ public class PrivateMessageManager {
 	public static void sendPrivateMessage(CommandSender sender, CommandSender receiver, String message) {
 		if (receiver instanceof ConsoleCommandSender || ((Player) receiver).isOnline()) {
 			if (!sender.equals(receiver)) {
-				sender.sendMessage(String.format("§8>> Vous chuchotez à §7%s §8%s §7%s", receiver.getName(),
-						UtilsAPI.CARAC_DOUBLE_QUOTE_END, message));
-				receiver.sendMessage(String.format("§8>> §7%s §8vous chuchote %s §7%s",
-						sender instanceof ConsoleCommandSender ? "§c@Console" : sender.getName(),
-						UtilsAPI.CARAC_DOUBLE_QUOTE_END, message));
+				HashMap<String, String> values = new HashMap<>();
+				String consoleName = ServerToolsConfig.getCommandMessage(CmdMsg.CMD_LABEL, "other_console_name");
+				values.put("Sender", sender instanceof ConsoleCommandSender ? consoleName : sender.getName());
+				values.put("Receiver", receiver.getName());
+				values.put("Message", message);
+
+				String messageSend = ServerToolsConfig.getCommandMessage(CmdMsg.CMD_LABEL, "normal_msg_send", values);
+				UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, sender, messageSend);
+				String messageReceive = ServerToolsConfig.getCommandMessage(CmdMsg.CMD_LABEL, "normal_msg_receive",
+						values);
+				UtilsAPI.sendSystemMessage(MessageLevel.NORMAL, receiver, messageReceive);
 
 				if (receiver instanceof Player) {
-					((Player) receiver).playSound(((Player) receiver).getLocation(), Sound.BLOCK_NOTE_PLING, 1, 2);
+					Player playerReceiver = (Player) receiver;
+					playerReceiver.playSound(playerReceiver.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 2);
 				}
 				addReceiver(sender, receiver);
 				addReceiver(receiver, sender);
@@ -64,7 +74,8 @@ public class PrivateMessageManager {
 		if (hasSender(receiver)) {
 			sendPrivateMessage(receiver, getSender(receiver), message);
 		} else {
-			UtilsAPI.sendSystemMessage(MessageLevel.ERROR, receiver, "Vous n'avez personne à qui répondre.");
+			String messageFailure = ServerToolsConfig.getCommandMessage(CmdReply.CMD_LABEL, "failure_no_receiver");
+			UtilsAPI.sendSystemMessage(MessageLevel.FAILURE, receiver, messageFailure);
 		}
 	}
 }

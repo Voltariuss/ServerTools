@@ -160,6 +160,10 @@ messages:
     more:
       failure_slot_already_full: "Votre slot est déjà plein."
       warning_no_item_in_main_hand: "Vous n'avez pas d'item dans votre main."
+    msg:
+      other_console_name: "§c@Console"
+      normal_msg_send: "§8>> Vous chuchotez à §7{Receiver} §8» §7{Message}"
+      normal_msg_receive: "§8>> §7{Sender} §8vous chuchote » §7{Message}"
     ping:
       info_ping_himself: "§6Pong ! §8» {Ping} §ems"
       info_ping_target: "Temps de réponse du joueur §b{Player} §e: {Ping} ms"
@@ -173,6 +177,8 @@ messages:
       failure_item_not_repairable: "L'item n'est pas réparable."
       failure_item_in_main_hand_not_repairable: "L'item dans votre main n'est pas réparable."
       warning_no_item_in_main_hand: "Vous n'avez aucun item dans votre main principale."
+    reply:
+      failure_no_receiver: "Vous n'avez personne à qui répondre."
     seen:
       normal_unknow_tag: "Inconnue"
       other_header_info_ip: "Informations sur l'IP"

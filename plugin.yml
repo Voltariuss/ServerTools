@@ -4,6 +4,7 @@ description: ${project.description}
 author: Voltariuss
 authors: [Serafa43, bletrazerIV, SkilzBeater]
 main: ${project.groupId}.${project.name}
+depend: [SimpleDevAPI]
 
 commands:
   adminexp:

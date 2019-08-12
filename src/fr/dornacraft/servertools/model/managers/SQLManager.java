@@ -4,10 +4,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.dornacraft.servertools.ServerTools;
 import fr.dornacraft.servertools.model.database.SQLPlayer;
+import fr.voltariuss.simpledevapi.UtilsAPI;
 import fr.voltariuss.simpledevapi.sql.SQLConnection;
 
 public class SQLManager {
@@ -24,7 +23,7 @@ public class SQLManager {
             }
         } catch (SQLException e) {
             setDatabaseAvailable(false);
-            Bukkit.getLogger().log(Level.WARNING, JavaPlugin.getPlugin(ServerTools.class).getConfig().getString("messages.database_no_connection"));
+            Bukkit.getLogger().log(Level.WARNING, UtilsAPI.SQL_NO_CONNECTION);
             e.printStackTrace();
         }
     }

@@ -36,7 +36,6 @@ delay_teleportation: 5
 # Note: §r (reset formatter) will reset the message color to the default color specific to each type of message
 # Example: Info message => "This message is yellow, §cRed now, §rYellow again"
 messages:
-  database_no_connection: "Le plugin n'est connecté a aucune base de données. Certaines fonctionnalités ont été désactivées ou bridées."
   info_teleport_begin: "Téléportation dans §6{Delay} secondes§r..."
   info_teleport_start: "Début de la téléportation..."
   success_teleport_player: "Le joueur §b{Target} §ra bien été téléporté."

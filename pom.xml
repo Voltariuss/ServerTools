@@ -7,7 +7,7 @@
 	<!-- ===== Maven Informations ===== -->
 	<groupId>fr.dornacraft.servertools</groupId>
 	<artifactId>server-tools</artifactId>
-	<version>0.5.11-SNAPSHOT</version>
+	<version>0.5.12-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<!-- ===== Global Informations ===== -->
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>fr.voltariuss.simpledevapi</groupId>
 			<artifactId>simple-dev-api</artifactId>
-			<version>1.6.6</version>
+			<version>1.6.7</version>
 			<scope>provided</scope>
 		</dependency>	
 	</dependencies>

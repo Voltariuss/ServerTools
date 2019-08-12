@@ -89,7 +89,6 @@ public class ServerTools extends JavaPlugin {
 		getCommand(CmdBroadcast.CMD_LABEL).setExecutor(new CmdBroadcast());
 		getCommand(CmdHat.CMD_LABEL).setExecutor(new CmdHat());
 		getCommand(CmdKillAll.CMD_LABEL).setExecutor(new CmdKillAll());
-		// TODO commande fonctionnelle mais non stable
 		getCommand(CmdSuicide.CMD_LABEL).setExecutor(new CmdSuicide());
 		getCommand(CmdGc.CMD_LABEL).setExecutor(new CmdGc());
 		getCommand(CmdPing.CMD_LABEL).setExecutor(new CmdPing());
@@ -104,7 +103,6 @@ public class ServerTools extends JavaPlugin {
 		getCommand(CmdSethome.CMD_LABEL).setExecutor(new CmdSethome());
 		getCommand(CmdClear.CMD_LABEL).setExecutor(new CmdClear());
 		getCommand(CmdAdminExp.CMD_LABEL).setExecutor(new CmdAdminExp());
-		// TODO commande NE fonctionne PAS
 		getCommand(CmdCraft.CMD_LABEL).setExecutor(new CmdCraft());
 		getCommand(CmdEnderchest.CMD_LABEL).setExecutor(new CmdEnderchest());
 		getCommand(CmdExp.CMD_LABEL).setExecutor(new CmdExp());
